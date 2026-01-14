@@ -96,8 +96,13 @@ jobs:
         ./appimagetool-x86_64.AppImage --appimage-extract
         chmod +x squashfs-root/usr/bin/appimagetool
 
+    - name: Remove extra AppRun binaries
+      run: |
+        rm -f squashfs-root/AppRun
+        rm -f squashfs-root/usr/bin/AppRun
+
     - name: Build AppImage
-      run: squashfs-root/usr/bin/appimagetool installers/appimage/AppDir LumenRGB.AppImage
+      run: ARCH=x86_64 squashfs-root/usr/bin/appimagetool installers/appimage/AppDir LumenRGB.AppImage
 
     - name: Upload AppImage
       uses: softprops/action-gh-release@v2
