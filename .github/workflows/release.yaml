@@ -19,24 +19,19 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: "9.0.x"
+        dotnet-version: "8.0.x"
 
     - name: Restore
       run: dotnet restore
 
     - name: Publish self-contained
-      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj \
-            -c Release \
-            -r ${{ matrix.rid }} \
-            --self-contained true \
-            -p:PublishSingleFile=true \
-            -p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
     - name: Upload published output
       uses: actions/upload-artifact@v4
       with:
         name: publish-${{ matrix.rid }}
-        path: LumenRGB.UI.Avalonia/bin/Release/net9.0/${{ matrix.rid }}/publish/
+        path: LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/publish/
 
   windows_installer:
     runs-on: ubuntu-latest
