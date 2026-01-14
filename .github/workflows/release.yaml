@@ -57,7 +57,8 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y nsis
 
     - name: Build NSIS installer
-      run: makensis installers/nsis/installer.nsi
+      working-directory: installers/nsis
+      run: makensis installer.nsi
 
     - name: Upload installer
       uses: softprops/action-gh-release@v2
@@ -91,8 +92,14 @@ jobs:
         wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
 
+    - name: Extract appimagetool (FUSE workaround)
+      run: |
+        ./appimagetool-x86_64.AppImage --appimage-extract
+        mv squashfs-root/appimagetool ./appimagetool-extracted
+        chmod +x ./appimagetool-extracted
+
     - name: Build AppImage
-      run: ./appimagetool-x86_64.AppImage installers/appimage/AppDir LumenRGB.AppImage
+      run: ./appimagetool-extracted installers/appimage/AppDir LumenRGB.AppImage
 
     - name: Upload AppImage
       uses: softprops/action-gh-release@v2
