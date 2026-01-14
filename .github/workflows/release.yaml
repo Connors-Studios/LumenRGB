@@ -56,6 +56,15 @@ jobs:
     - name: Build NSIS installer
       run: makensis installers/nsis/installer.nsi
 
+    - name: Debug root directory
+      run: ls -R ${{ github.workspace }}
+
+    - naame: Upload installer
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ github.workspace }}/LumenRGB-Setup.exe
+        overwrite_files: true
+
     - name: Upload installer
       uses: softprops/action-gh-release@v2
       with:
