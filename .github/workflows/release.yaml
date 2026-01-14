@@ -84,8 +84,7 @@ jobs:
     - name: Prepare AppDir
       run: |
         chmod +x installers/appimage/AppDir/usr/bin/LumenRGB
-        cp installers/appimage/AppDir/LumenRGB.desktop installers/appimage/AppDir/
-        cp installers/appimage/AppDir/LumenRGB.png installers/appimage/AppDir/
+        # Removed the two self-copying lines
         cp installers/appimage/AppDir/AppRun installers/appimage/AppDir/
         chmod +x installers/appimage/AppDir/AppRun
 
