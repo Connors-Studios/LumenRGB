@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Publish self-contained
-      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:AssemblyName=LumenRGB
+      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
     - name: Upload published output
       uses: actions/upload-artifact@v4
@@ -46,6 +46,9 @@ jobs:
       with:
         name: publish-win-x64
         path: publish
+
+    - name: Rename Windows executable
+      run: mv publish/LumenRGB.UI.Avalonia.exe publish/LumenRGB.exe
 
     - name: Install NSIS
       run: sudo apt-get update && sudo apt-get install -y nsis
@@ -71,6 +74,9 @@ jobs:
       with:
         name: publish-linux-x64
         path: installers/appimage/AppDir/usr/bin
+
+    - name: Rename Linux executable
+      run: mv installers/appimage/AppDir/usr/bin/LumenRGB.UI.Avalonia installers/appimage/AppDir/usr/bin/LumenRGB
 
     - name: Prepare AppDir
       run: |
