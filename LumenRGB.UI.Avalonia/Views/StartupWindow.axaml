@@ -14,7 +14,7 @@
         TransparencyLevelHint="AcrylicBlur"
         SystemDecorations="None"
         x:Class="LumenRGB.UI.Avalonia.StartupWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/LumenRGB_arc_256.ico"
         Title="LumenRGB">
     <Window.Styles>
     <Style Selector="Window">

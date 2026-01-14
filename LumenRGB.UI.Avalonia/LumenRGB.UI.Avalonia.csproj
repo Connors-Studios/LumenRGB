@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>Assets\LumenRGB_arc_256.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,10 +25,15 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="3.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LumenRGB.Core\LumenRGB.Core.csproj" />
     <ProjectReference Include="..\LumenRGB.Devices\LumenRGB.Devices.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\LumenRGB_arc_256.ico" />
   </ItemGroup>
 </Project>

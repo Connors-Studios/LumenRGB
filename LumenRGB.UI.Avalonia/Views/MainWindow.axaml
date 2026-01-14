@@ -18,7 +18,7 @@
         SystemDecorations="Full"
         x:Class="LumenRGB.UI.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/LumenRGB_arc_256.ico"
         Title="LumenRGB">
 
     <Design.DataContext>
