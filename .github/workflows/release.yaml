@@ -27,6 +27,9 @@ jobs:
     - name: Publish self-contained
       run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
+    - name: Debug publish output
+      run: ls -R LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/
+
     - name: Upload published output
       uses: actions/upload-artifact@v4
       with:
