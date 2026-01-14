@@ -1,15 +1,25 @@
 LumenRGB — Copyright (c) Connor Studios
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License v3.0 (AGPL-3.0)
-as published by the Free Software Foundation.
+LumenRGB is offered under a dual‑license model:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+1. The GNU Affero General Public License v3.0 (AGPL‑3.0)
+2. A commercial license for organizations that cannot comply with the AGPL
 
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
+If you cannot meet the requirements of the AGPL, you must obtain a commercial
+license. See COMMERCIAL_LICENSE.md for details.
+
+---
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License v3.0 as published by the
+Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.
 
 Full license text:
 https://www.gnu.org/licenses/agpl-3.0.txt

@@ -2,17 +2,17 @@
 
 
 
-LumenRGB is dual-licensed. It is available under:
+LumenRGB is dual‑licensed. It is available under:
 
 
 
-\- The GNU Affero General Public License v3.0 (AGPL-3.0)
+\- The GNU Affero General Public License v3.0 (AGPL‑3.0)
 
 \- A commercial license for organizations that cannot comply with the AGPL
 
 
 
-\## When you need a commercial license
+\## When a commercial license is required
 
 
 
@@ -20,7 +20,7 @@ You must obtain a commercial license if you:
 
 
 
-\- Use LumenRGB in a closed-source or proprietary product
+\- Use LumenRGB in a closed‑source or proprietary product
 
 \- Integrate LumenRGB into a commercial system without releasing your source code
 
@@ -36,7 +36,7 @@ You must obtain a commercial license if you:
 
 \- No obligation to release your source code
 
-\- Priority support and optional custom features
+\- Priority support and optional custom development
 
 
 
@@ -50,7 +50,7 @@ To purchase a commercial license, contact:
 
 \*\*Connor Studios\*\*  
 
-Email: \*your email here\*  
+Email: support@connorsstudios.net
 
 
 
