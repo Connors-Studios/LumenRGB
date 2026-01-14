@@ -59,7 +59,7 @@ jobs:
     - name: Debug root directory
       run: ls -R ${{ github.workspace }}
 
-    - naame: Upload installer
+    - name: Upload installer
       uses: softprops/action-gh-release@v2
       with:
         files: ${{ github.workspace }}/LumenRGB-Setup.exe
