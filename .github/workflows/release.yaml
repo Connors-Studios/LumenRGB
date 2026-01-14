@@ -54,7 +54,9 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y nsis
 
     - name: Build NSIS installer
-      run: makensis installers/nsis/installer.nsi
+      run: |
+         cd installers/nsis
+         makensis installer.nsi
 
     - name: Debug root directory
       run: ls -R ${{ github.workspace }}

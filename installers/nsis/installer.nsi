@@ -11,6 +11,7 @@
 ; Installer Metadata
 ; ---------------------------------------
 OutFile "LumenRGB-Setup.exe"
+Name "LumenRGB Setup"
 InstallDir "$PROGRAMFILES\LumenRGB"
 InstallDirRegKey HKLM "Software\LumenRGB" "InstallLocation"
 
@@ -30,7 +31,7 @@ UninstallIcon "LumenRGB_arc_256.ico"
 ; Pages (Welcome → License → Directory → Install → Finish)
 ; ---------------------------------------
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "LICENSE"
+!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
