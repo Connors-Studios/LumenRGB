@@ -1,4 +1,4 @@
-name: Build and Publish Release
+name: Build and Publish Release (Debug)
 
 on:
   release:
@@ -16,6 +16,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Debug: root directory
+      run: |
+        echo "=== ROOT DIR ==="
+        pwd
+        ls -R .
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -27,8 +33,19 @@ jobs:
     - name: Publish self-contained
       run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
-    - name: Debug publish output
-      run: ls -R LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/
+    - name: Debug: publish output
+      run: |
+        echo "=== PUBLISH OUTPUT ==="
+        ls -R LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/
+
+    - name: Debug: publish folder existence
+      run: |
+        echo "=== CHECK publish/ FOLDER ==="
+        if [ -d LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/publish ]; then
+          echo "Publish folder exists"
+        else
+          echo "Publish folder DOES NOT EXIST"
+        fi
 
     - name: Upload published output
       uses: actions/upload-artifact@v4
@@ -44,21 +61,54 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Debug: working directory
+      run: |
+        echo "=== WORKING DIR ==="
+        pwd
+        ls -R .
+
     - name: Download Windows publish
       uses: actions/download-artifact@v4
       with:
         name: publish-win-x64
         path: publish
 
+    - name: Debug: downloaded publish folder
+      run: |
+        echo "=== DOWNLOADED publish/ ==="
+        ls -R publish
+
     - name: Rename Windows executable
-      run: mv publish/LumenRGB.UI.Avalonia.exe publish/LumenRGB.exe
+      run: |
+        echo "=== BEFORE RENAME ==="
+        ls -R publish
+        mv publish/LumenRGB.UI.Avalonia.exe publish/LumenRGB.exe
+        echo "=== AFTER RENAME ==="
+        ls -R publish
 
     - name: Install NSIS
       run: sudo apt-get update && sudo apt-get install -y nsis
 
+    - name: Debug: NSIS working directory
+      run: |
+        echo "=== NSIS WORKING DIR ==="
+        pwd
+        ls -R .
+
+    - name: Debug: NSIS script directory
+      run: |
+        echo "=== NSIS SCRIPT DIR ==="
+        ls -R installers/nsis
+
     - name: Build NSIS installer
       working-directory: installers/nsis
-      run: makensis installer.nsi
+      run: |
+        echo "=== RUNNING NSIS ==="
+        pwd
+        ls -R .
+        echo "=== TRYING TO ACCESS ../publish ==="
+        ls -R ../publish || echo "publish folder not found"
+        makensis installer.nsi
 
     - name: Upload installer
       uses: softprops/action-gh-release@v2
@@ -73,17 +123,35 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Debug: working directory
+      run: |
+        echo "=== WORKING DIR ==="
+        pwd
+        ls -R .
+
     - name: Download Linux publish
       uses: actions/download-artifact@v4
       with:
         name: publish-linux-x64
         path: installers/appimage/AppDir/usr/bin
 
+    - name: Debug: downloaded linux publish
+      run: |
+        echo "=== DOWNLOADED LINUX publish ==="
+        ls -R installers/appimage/AppDir/usr/bin
+
     - name: Rename Linux executable
-      run: mv installers/appimage/AppDir/usr/bin/LumenRGB.UI.Avalonia installers/appimage/AppDir/usr/bin/LumenRGB
+      run: |
+        echo "=== BEFORE RENAME ==="
+        ls installers/appimage/AppDir/usr/bin
+        mv installers/appimage/AppDir/usr/bin/LumenRGB.UI.Avalonia installers/appimage/AppDir/usr/bin/LumenRGB
+        echo "=== AFTER RENAME ==="
+        ls installers/appimage/AppDir/usr/bin
 
     - name: Prepare AppDir
       run: |
+        echo "=== PREPARE APPDIR ==="
+        ls -R installers/appimage/AppDir
         chmod +x installers/appimage/AppDir/usr/bin/LumenRGB
         chmod +x installers/appimage/AppDir/AppRun
 
@@ -92,40 +160,22 @@ jobs:
         wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
 
-    - name: Extract appimagetool (FUSE workaround)
+    - name: Debug: extract appimagetool
       run: |
+        echo "=== EXTRACTING APPIMAGETOOL ==="
         ./appimagetool-x86_64.AppImage --appimage-extract
-        mv squashfs-root/appimagetool ./appimagetool-extracted
-        chmod +x ./appimagetool-extracted
+        echo "=== CONTENTS OF squashfs-root ==="
+        ls -R squashfs-root
 
     - name: Build AppImage
-      run: ./appimagetool-extracted installers/appimage/AppDir LumenRGB.AppImage
+      run: |
+        echo "=== USING EXTRACTED APPIMAGETOOL ==="
+        chmod +x squashfs-root/usr/bin/appimagetool
+        squashfs-root/usr/bin/appimagetool installers/appimage/AppDir LumenRGB.AppImage
+        echo "=== RESULT ==="
+        ls -R .
 
     - name: Upload AppImage
       uses: softprops/action-gh-release@v2
       with:
         files: LumenRGB.AppImage
-
-  update_appcast:
-    runs-on: ubuntu-latest
-    needs: [windows_installer, linux_appimage]
-
-    steps:
-    - name: Generate appcast.xml
-      run: |
-        echo "<rss version=\"2.0\">" > appcast.xml
-        echo "  <channel>" >> appcast.xml
-        echo "    <title>LumenRGB Updates</title>" >> appcast.xml
-        echo "    <item>" >> appcast.xml
-        echo "      <title>${{ github.event.release.tag_name }}</title>" >> appcast.xml
-        echo "      <releaseNotes><![CDATA[${{ github.event.release.body }}]]></releaseNotes>" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup.exe\" />" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB.AppImage\" />" >> appcast.xml
-        echo "    </item>" >> appcast.xml
-        echo "  </channel>" >> appcast.xml
-        echo "</rss>" >> appcast.xml
-
-    - name: Upload appcast.xml
-      uses: softprops/action-gh-release@v2
-      with:
-        files: appcast.xml
