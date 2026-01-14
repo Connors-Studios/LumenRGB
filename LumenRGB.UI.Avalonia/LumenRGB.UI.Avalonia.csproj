@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <ApplicationIcon>Assets\LumenRGB_arc_256.ico</ApplicationIcon>
+	<ApplicationIcon>Assets\LumenRGB_arc_256.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

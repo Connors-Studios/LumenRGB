@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Publish self-contained
-      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:AssemblyName=LumenRGB
 
     - name: Upload published output
       uses: actions/upload-artifact@v4
