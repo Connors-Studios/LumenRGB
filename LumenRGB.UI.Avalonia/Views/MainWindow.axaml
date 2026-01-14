@@ -25,74 +25,42 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="100,*">
+    <Grid ColumnDefinitions="120,*">
 
         <!-- LEFT SIDEBAR -->
-        <Grid Background="#222">
+        <Grid Background="#222" Margin="10,10,0,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- TOP BUTTONS -->
-            <StackPanel Grid.Row="0" Margin="0,10,0,0" Spacing="0">
+            <!-- TOP GROUP -->
+            <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,10">
 
-                <!-- HOME -->
-                <Grid ColumnDefinitions="*,4" Height="70">
-                    <Button Grid.Column="0"
-                            Classes="sidebar"
-                            Content="Home"
-                            Padding="0,20"
-                            Command="{Binding NavigateHomeCommand}"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"/>
-                </Grid>
+                <Button Classes="sidebar"
+                        Content="Home"
+                        Command="{Binding NavigateHomeCommand}"/>
 
-                <!-- DEVICES -->
-                <Grid ColumnDefinitions="*,4" Height="70">
-                    <Button Grid.Column="0"
-                            Classes="sidebar"
-                            Content="Devices"
-                            Padding="0,20"
-                            Command="{Binding NavigateDevicesCommand}"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"/>
-                </Grid>
+                <Button Classes="sidebar"
+                        Content="Devices"
+                        Command="{Binding NavigateDevicesCommand}"/>
 
             </StackPanel>
 
             <!-- SPACER -->
             <Border Grid.Row="1"/>
 
-            <!-- BOTTOM BUTTONS -->
-            <StackPanel Grid.Row="2" Margin="0,0,0,10" Spacing="0">
+            <!-- BOTTOM GROUP -->
+            <StackPanel Grid.Row="2" Spacing="6" Margin="0,10,0,0">
 
-                <!-- SETTINGS -->
-                <Grid ColumnDefinitions="*,4" Height="70">
-                    <Button Grid.Column="0"
-                            Classes="sidebar"
-                            Content="Settings"
-                            Padding="0,20"
-                            Command="{Binding NavigateSettingsCommand}"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"/>
-                </Grid>
+                <Button Classes="sidebar"
+                        Content="Settings"
+                        Command="{Binding NavigateSettingsCommand}"/>
 
-                <!-- ABOUT -->
-                <Grid ColumnDefinitions="*,4" Height="70">
-                    <Button Grid.Column="0"
-                            Classes="sidebar"
-                            Content="About"
-                            Padding="0,20"
-                            Command="{Binding NavigateAboutCommand}"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"/>
-                </Grid>
+                <Button Classes="sidebar"
+                        Content="About"
+                        Command="{Binding NavigateAboutCommand}"/>
 
             </StackPanel>
 
