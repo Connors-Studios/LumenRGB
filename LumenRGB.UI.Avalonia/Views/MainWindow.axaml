@@ -1,0 +1,158 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LumenRGB.UI.Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:anim="using:Avalonia.Animation"
+        xmlns:controls="using:Avalonia.Controls"
+        xmlns:converters="using:LumenRGB.UI.Avalonia.Converters"
+        mc:Ignorable="d"
+        d:DesignWidth="1200"
+        d:DesignHeight="600"
+        Width="1200"
+        Height="600"
+        SizeToContent="Manual"
+        CanResize="True"
+        WindowStartupLocation="CenterScreen"
+        Background="#1A1A1A"
+        TransparencyLevelHint="AcrylicBlur"
+        SystemDecorations="Full"
+        x:Class="LumenRGB.UI.Avalonia.Views.MainWindow"
+        x:Name="RootWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="LumenRGB">
+
+    <Window.Resources>
+        <converters:EqualityConverter x:Key="EqualityConverter"/>
+        <LinearGradientBrush x:Key="RgbGradient" StartPoint="0,0" EndPoint="0,60">
+            <GradientStop Color="Red" Offset="0.0"/>
+            <GradientStop Color="Orange" Offset="0.16"/>
+            <GradientStop Color="Yellow" Offset="0.33"/>
+            <GradientStop Color="Lime" Offset="0.50"/>
+            <GradientStop Color="Cyan" Offset="0.66"/>
+            <GradientStop Color="Blue" Offset="0.83"/>
+            <GradientStop Color="Magenta" Offset="1.0"/>
+        </LinearGradientBrush>
+
+
+
+    </Window.Resources>
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="100,*">
+
+        <!-- LEFT SIDEBAR -->
+        <Grid Background="#222">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- TOP BUTTONS -->
+            <StackPanel Grid.Row="0" Margin="0,10,0,0" Spacing="0">
+
+                <!-- HOME -->
+                <Grid ColumnDefinitions="*,4" Height="70">
+                    <Button Grid.Column="0"
+                            Classes="sidebar"
+                            Content="Home"
+                            Padding="0,20"
+                            Command="{Binding NavigateHomeCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+
+                    <Border Grid.Column="1"
+                            Background="{StaticResource RgbGradient}"
+                            IsVisible="{Binding DataContext.SelectedPage,
+                                                ElementName=RootWindow,
+                                                Converter={StaticResource EqualityConverter},
+                                                ConverterParameter=Home}"/>
+                </Grid>
+
+                <!-- DEVICES -->
+                <Grid ColumnDefinitions="*,4" Height="70">
+                    <Button Grid.Column="0"
+                            Classes="sidebar"
+                            Content="Devices"
+                            Padding="0,20"
+                            Command="{Binding NavigateDevicesCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+
+                    <Border Grid.Column="1"
+                            Background="{StaticResource RgbGradient}"
+                            IsVisible="{Binding DataContext.SelectedPage,
+                                                ElementName=RootWindow,
+                                                Converter={StaticResource EqualityConverter},
+                                                ConverterParameter=Devices}"/>
+                </Grid>
+
+            </StackPanel>
+
+            <!-- SPACER -->
+            <Border Grid.Row="1"/>
+
+            <!-- BOTTOM BUTTONS -->
+            <StackPanel Grid.Row="2" Margin="0,0,0,10" Spacing="0">
+
+                <!-- SETTINGS -->
+                <Grid ColumnDefinitions="*,4" Height="70">
+                    <Button Grid.Column="0"
+                            Classes="sidebar"
+                            Content="Settings"
+                            Padding="0,20"
+                            Command="{Binding NavigateSettingsCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+
+                    <Border Grid.Column="1"
+                            Background="{StaticResource RgbGradient}"
+                            IsVisible="{Binding DataContext.SelectedPage,
+                                                ElementName=RootWindow,
+                                                Converter={StaticResource EqualityConverter},
+                                                ConverterParameter=Settings}"/>
+                </Grid>
+
+                <!-- ABOUT -->
+                <Grid ColumnDefinitions="*,4" Height="70">
+                    <Button Grid.Column="0"
+                            Classes="sidebar"
+                            Content="About"
+                            Padding="0,20"
+                            Command="{Binding NavigateAboutCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+
+                    <Border Grid.Column="1"
+                            Background="{StaticResource RgbGradient}"
+                            IsVisible="{Binding DataContext.SelectedPage,
+                                                ElementName=RootWindow,
+                                                Converter={StaticResource EqualityConverter},
+                                                ConverterParameter=About}"/>
+                </Grid>
+
+            </StackPanel>
+
+        </Grid>
+
+        <!-- MAIN CONTENT AREA -->
+        <controls:TransitioningContentControl Grid.Column="1"
+                                              Content="{Binding CurrentPage}"
+                                              Margin="10">
+            <controls:TransitioningContentControl.PageTransition>
+                <anim:CrossFade Duration="0:0:0.25"/>
+            </controls:TransitioningContentControl.PageTransition>
+        </controls:TransitioningContentControl>
+
+    </Grid>
+
+</Window>

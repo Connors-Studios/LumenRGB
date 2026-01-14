@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="LumenRGB.Core/LumenRGB.Core.csproj" />
+  <Project Path="LumenRGB.Devices/LumenRGB.Devices.csproj" />
+  <Project Path="LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj" Id="5b3dc26f-9104-4c15-8c39-f954f894e34a" />
+</Solution>

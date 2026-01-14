@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="clr-namespace:Avalonia.Labs.Gif;assembly=Avalonia.Labs.Gif"
+        xmlns:vm="clr-namespace:LumenRGB.UI.Avalonia.ViewModels"
+        x:DataType="vm:StartupViewModel"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="800" Height="450"
+        SizeToContent="Manual"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="#1A1A1A"
+        TransparencyLevelHint="AcrylicBlur"
+        SystemDecorations="None"
+        x:Class="LumenRGB.UI.Avalonia.StartupWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="LumenRGB">
+    <Window.Styles>
+    <Style Selector="Window">
+        <Setter Property="Opacity" Value="0"/>
+        <Style.Animations>
+            <Animation Duration="0:0:0.4" FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0"/>
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="1"/>
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+</Window.Styles>
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <gif:GifImage Source="avares://LumenRGB.UI.Avalonia/Assets/arc.gif"
+                          Width="128"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center"/>
+
+            <TextBlock Text="{Binding StatusText}"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
