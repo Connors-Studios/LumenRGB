@@ -12,7 +12,7 @@
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.11" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />
@@ -32,8 +32,5 @@
     <ProjectReference Include="..\LumenRGB.Core\LumenRGB.Core.csproj" />
     <ProjectReference Include="..\LumenRGB.Devices\LumenRGB.Devices.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Assets\LumenRGB_arc_256.ico" />
-  </ItemGroup>
 </Project>
+
