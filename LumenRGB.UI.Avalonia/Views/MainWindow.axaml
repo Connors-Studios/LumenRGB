@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:anim="using:Avalonia.Animation"
         xmlns:controls="using:Avalonia.Controls"
-        xmlns:converters="using:LumenRGB.UI.Avalonia.Converters"
         mc:Ignorable="d"
         d:DesignWidth="1200"
         d:DesignHeight="600"
@@ -18,26 +17,9 @@
         TransparencyLevelHint="AcrylicBlur"
         SystemDecorations="Full"
         x:Class="LumenRGB.UI.Avalonia.Views.MainWindow"
-        x:Name="RootWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="LumenRGB">
-
-    <Window.Resources>
-        <converters:EqualityConverter x:Key="EqualityConverter"/>
-        <LinearGradientBrush x:Key="RgbGradient" StartPoint="0,0" EndPoint="0,60">
-            <GradientStop Color="Red" Offset="0.0"/>
-            <GradientStop Color="Orange" Offset="0.16"/>
-            <GradientStop Color="Yellow" Offset="0.33"/>
-            <GradientStop Color="Lime" Offset="0.50"/>
-            <GradientStop Color="Cyan" Offset="0.66"/>
-            <GradientStop Color="Blue" Offset="0.83"/>
-            <GradientStop Color="Magenta" Offset="1.0"/>
-        </LinearGradientBrush>
-
-
-
-    </Window.Resources>
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -66,13 +48,6 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"/>
-
-                    <Border Grid.Column="1"
-                            Background="{StaticResource RgbGradient}"
-                            IsVisible="{Binding DataContext.SelectedPage,
-                                                ElementName=RootWindow,
-                                                Converter={StaticResource EqualityConverter},
-                                                ConverterParameter=Home}"/>
                 </Grid>
 
                 <!-- DEVICES -->
@@ -85,13 +60,6 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"/>
-
-                    <Border Grid.Column="1"
-                            Background="{StaticResource RgbGradient}"
-                            IsVisible="{Binding DataContext.SelectedPage,
-                                                ElementName=RootWindow,
-                                                Converter={StaticResource EqualityConverter},
-                                                ConverterParameter=Devices}"/>
                 </Grid>
 
             </StackPanel>
@@ -112,13 +80,6 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"/>
-
-                    <Border Grid.Column="1"
-                            Background="{StaticResource RgbGradient}"
-                            IsVisible="{Binding DataContext.SelectedPage,
-                                                ElementName=RootWindow,
-                                                Converter={StaticResource EqualityConverter},
-                                                ConverterParameter=Settings}"/>
                 </Grid>
 
                 <!-- ABOUT -->
@@ -131,13 +92,6 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"/>
-
-                    <Border Grid.Column="1"
-                            Background="{StaticResource RgbGradient}"
-                            IsVisible="{Binding DataContext.SelectedPage,
-                                                ElementName=RootWindow,
-                                                Converter={StaticResource EqualityConverter},
-                                                ConverterParameter=About}"/>
                 </Grid>
 
             </StackPanel>
