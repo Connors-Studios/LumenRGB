@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Debug: root directory
+    - name: Debug root directory
       run: |
         echo "=== ROOT DIR ==="
         pwd
@@ -33,12 +33,12 @@ jobs:
     - name: Publish self-contained
       run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
-    - name: Debug: publish output
+    - name: Debug publish output
       run: |
         echo "=== PUBLISH OUTPUT ==="
         ls -R LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/
 
-    - name: Debug: publish folder existence
+    - name: Debug publish folder existence
       run: |
         echo "=== CHECK publish/ FOLDER ==="
         if [ -d LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/publish ]; then
@@ -61,7 +61,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Debug: working directory
+    - name: Debug working directory
       run: |
         echo "=== WORKING DIR ==="
         pwd
@@ -73,7 +73,7 @@ jobs:
         name: publish-win-x64
         path: publish
 
-    - name: Debug: downloaded publish folder
+    - name: Debug downloaded publish folder
       run: |
         echo "=== DOWNLOADED publish/ ==="
         ls -R publish
@@ -89,13 +89,13 @@ jobs:
     - name: Install NSIS
       run: sudo apt-get update && sudo apt-get install -y nsis
 
-    - name: Debug: NSIS working directory
+    - name: Debug NSIS working directory
       run: |
         echo "=== NSIS WORKING DIR ==="
         pwd
         ls -R .
 
-    - name: Debug: NSIS script directory
+    - name: Debug NSIS script directory
       run: |
         echo "=== NSIS SCRIPT DIR ==="
         ls -R installers/nsis
@@ -123,7 +123,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Debug: working directory
+    - name: Debug working directory
       run: |
         echo "=== WORKING DIR ==="
         pwd
@@ -135,7 +135,7 @@ jobs:
         name: publish-linux-x64
         path: installers/appimage/AppDir/usr/bin
 
-    - name: Debug: downloaded linux publish
+    - name: Debug downloaded linux publish
       run: |
         echo "=== DOWNLOADED LINUX publish ==="
         ls -R installers/appimage/AppDir/usr/bin
@@ -160,7 +160,7 @@ jobs:
         wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
 
-    - name: Debug: extract appimagetool
+    - name: Debug extract appimagetool
       run: |
         echo "=== EXTRACTING APPIMAGETOOL ==="
         ./appimagetool-x86_64.AppImage --appimage-extract
