@@ -59,7 +59,7 @@ jobs:
     - name: Upload installer
       uses: softprops/action-gh-release@v2
       with:
-        files: LumenRGB-Setup.exe
+        files: ./LumenRGB-Setup.exe
 
   linux_appimage:
     runs-on: ubuntu-latest
