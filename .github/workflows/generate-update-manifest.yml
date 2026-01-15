@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Get latest release tag and notes
+    - name: Fetch releases and extract tags
       run: |
         REPO="${{ github.repository }}"
 
@@ -24,42 +24,81 @@ jobs:
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/$REPO/releases)
 
-        TAG=$(echo "$RELEASES" | jq -r '.[0].tag_name')
-        VERSION="${TAG#v}"
-        BODY=$(echo "$RELEASES" | jq -r '.[0].body // ""')
+        # --- BETA CHANNEL (includes prereleases) ---
+        BETA_TAG=$(echo "$RELEASES" | jq -r '.[0].tag_name')
+        BETA_VERSION="${BETA_TAG#v}"
+        BETA_BODY=$(echo "$RELEASES" | jq -r '.[0].body // ""')
 
-        echo "TAG=$TAG" >> $GITHUB_ENV
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "BETA_TAG=$BETA_TAG" >> $GITHUB_ENV
+        echo "BETA_VERSION=$BETA_VERSION" >> $GITHUB_ENV
 
         {
-          echo "BODY<<EOF"
-          echo "$BODY"
+          echo "BETA_BODY<<EOF"
+          echo "$BETA_BODY"
           echo "EOF"
         } >> $GITHUB_ENV
 
-    - name: Generate update.json
-      run: |
-        cat <<EOF > update.json
+        # --- STABLE CHANNEL (non-prerelease only) ---
+        STABLE_TAG=$(echo "$RELEASES" | jq -r '[.[] | select(.prerelease == false)][0].tag_name')
+        STABLE_VERSION="${STABLE_TAG#v}"
+        STABLE_BODY=$(echo "$RELEASES" | jq -r '[.[] | select(.prerelease == false)][0].body // ""')
+
+        echo "STABLE_TAG=$STABLE_TAG" >> $GITHUB_ENV
+        echo "STABLE_VERSION=$STABLE_VERSION" >> $GITHUB_ENV
+
         {
-          "version": "${VERSION}",
-          "name": "LumenRGB ${VERSION}",
-          "notes": ${{ toJson(env.BODY) }},
+          echo "STABLE_BODY<<EOF"
+          echo "$STABLE_BODY"
+          echo "EOF"
+        } >> $GITHUB_ENV
+
+    - name: Generate update-beta.json
+      run: |
+        cat <<EOF > update-beta.json
+        {
+          "version": "${BETA_VERSION}",
+          "name": "LumenRGB ${BETA_VERSION}",
+          "notes": ${{ toJson(env.BETA_BODY) }},
+          "prerelease": true,
           "files": [
             {
               "type": "installer-exe",
-              "url": "https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-Setup-${VERSION}.exe"
+              "url": "https://github.com/${{ github.repository }}/releases/download/${BETA_TAG}/LumenRGB-Setup-${BETA_VERSION}.exe"
             },
             {
               "type": "appimage",
-              "url": "https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-${VERSION}.AppImage"
+              "url": "https://github.com/${{ github.repository }}/releases/download/${BETA_TAG}/LumenRGB-${BETA_VERSION}.AppImage"
             }
           ]
         }
         EOF
 
-    - name: Upload update.json
+    - name: Generate update-stable.json
+      run: |
+        cat <<EOF > update-stable.json
+        {
+          "version": "${STABLE_VERSION}",
+          "name": "LumenRGB ${STABLE_VERSION}",
+          "notes": ${{ toJson(env.STABLE_BODY) }},
+          "prerelease": false,
+          "files": [
+            {
+              "type": "installer-exe",
+              "url": "https://github.com/${{ github.repository }}/releases/download/${STABLE_TAG}/LumenRGB-Setup-${STABLE_VERSION}.exe"
+            },
+            {
+              "type": "appimage",
+              "url": "https://github.com/${{ github.repository }}/releases/download/${STABLE_TAG}/LumenRGB-${STABLE_VERSION}.AppImage"
+            }
+          ]
+        }
+        EOF
+
+    - name: Upload manifests
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ env.TAG }}
-        files: update.json
+        tag_name: ${{ env.BETA_TAG }}
+        files: |
+          update-beta.json
+          update-stable.json
         overwrite_files: true
