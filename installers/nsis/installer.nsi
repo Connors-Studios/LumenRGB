@@ -13,7 +13,7 @@
 ; ---------------------------------------
 ; Installer Metadata
 ; ---------------------------------------
-OutFile "LumenRGB-Setup.exe"
+OutFile "LumenRGB-Setup-${VERSION}.exe"
 Name "LumenRGB"
 InstallDir "$PROGRAMFILES\LumenRGB"
 InstallDirRegKey HKLM "Software\LumenRGB" "InstallLocation"
@@ -22,9 +22,9 @@ InstallDirRegKey HKLM "Software\LumenRGB" "InstallLocation"
 VIAddVersionKey "ProductName" "LumenRGB"
 VIAddVersionKey "CompanyName" "Connor Studios"
 VIAddVersionKey "FileDescription" "LumenRGB Lighting Control"
-VIAddVersionKey "ProductVersion" "1.0.0"
+VIAddVersionKey "ProductVersion" "${VERSION}"
 VIAddVersionKey "LegalCopyright" "© Connor Studios"
-VIProductVersion "1.0.0.0"
+VIProductVersion "${VERSION_NUMERIC}"
 
 ; Embed installer + uninstaller icon
 Icon "LumenRGB_arc_256.ico"
@@ -68,7 +68,7 @@ Section "Install"
   ; Register in Windows Apps & Features
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "DisplayName" "LumenRGB"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "Publisher" "Connor Studios"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "DisplayVersion" "1.0.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "DisplayVersion" "${VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB" "DisplayIcon" "$INSTDIR\LumenRGB.exe"

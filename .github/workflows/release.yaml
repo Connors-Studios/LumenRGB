@@ -16,6 +16,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Extract version from tag
+      run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -25,7 +28,13 @@ jobs:
       run: dotnet restore
 
     - name: Publish self-contained
-      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:Version=${{ env.VERSION }}
 
     - name: Upload published output
       uses: actions/upload-artifact@v4
@@ -40,6 +49,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Extract version from tag
+      run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+    - name: Extract numeric version for NSIS
+      run: echo "VERSION_NUMERIC=$(echo $VERSION | sed 's/-.*//').0" >> $GITHUB_ENV
 
     - name: Download Windows publish
       uses: actions/download-artifact@v4
@@ -56,15 +71,12 @@ jobs:
     - name: Build NSIS installer
       run: |
          cd installers/nsis
-         makensis installer.nsi
-
-    - name: Debug root directory
-      run: ls -R ${{ github.workspace }}
+         makensis -DVERSION=${{ env.VERSION }} -DVERSION_NUMERIC=${{ env.VERSION_NUMERIC }} installer.nsi
 
     - name: Upload installer
       uses: softprops/action-gh-release@v2
       with:
-        files: installers/nsis/LumenRGB-Setup.exe
+        files: installers/nsis/LumenRGB-Setup-${{ env.VERSION }}.exe
         overwrite_files: true
 
   linux_appimage:
@@ -74,6 +86,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Extract version from tag
+      run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
 
     - name: Download Linux publish
       uses: actions/download-artifact@v4
@@ -108,28 +123,46 @@ jobs:
         rm -f squashfs-root/usr/bin/AppRun
 
     - name: Build AppImage
-      run: ARCH=x86_64 squashfs-root/usr/bin/appimagetool installers/appimage/AppDir LumenRGB.AppImage
+      run: ARCH=x86_64 squashfs-root/usr/bin/appimagetool installers/appimage/AppDir LumenRGB-${{ env.VERSION }}.AppImage
 
     - name: Upload AppImage
       uses: softprops/action-gh-release@v2
       with:
-        files: LumenRGB.AppImage
+        files: LumenRGB-${{ env.VERSION }}.AppImage
 
   update_appcast:
     runs-on: ubuntu-latest
     needs: [windows_installer, linux_appimage]
 
     steps:
+    - name: Extract version from tag
+      run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+    - name: Download Windows installer
+      run: |
+        wget -O LumenRGB-Setup-${VERSION}.exe \
+        "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup-${VERSION}.exe"
+
+    - name: Download AppImage
+      run: |
+        wget -O LumenRGB-${VERSION}.AppImage \
+        "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-${VERSION}.AppImage"
+
+    - name: Compute SHA256 checksums
+      run: |
+        echo "SHA_WIN=$(sha256sum LumenRGB-Setup-${VERSION}.exe | awk '{print $1}')" >> $GITHUB_ENV
+        echo "SHA_LINUX=$(sha256sum LumenRGB-${VERSION}.AppImage | awk '{print $1}')" >> $GITHUB_ENV
+
     - name: Generate appcast.xml
       run: |
-        echo "<rss version=\"2.0\">" > appcast.xml
+        echo "<rss version=\"2.0\" xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\">" > appcast.xml
         echo "  <channel>" >> appcast.xml
         echo "    <title>LumenRGB Updates</title>" >> appcast.xml
         echo "    <item>" >> appcast.xml
-        echo "      <title>${{ github.event.release.tag_name }}</title>" >> appcast.xml
+        echo "      <title>${VERSION}</title>" >> appcast.xml
         echo "      <releaseNotes><![CDATA[${{ github.event.release.body }}]]></releaseNotes>" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup.exe\" />" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB.AppImage\" />" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup-${VERSION}.exe\" sparkle:sha256=\"${SHA_WIN}\" />" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-${VERSION}.AppImage\" sparkle:sha256=\"${SHA_LINUX}\" />" >> appcast.xml
         echo "    </item>" >> appcast.xml
         echo "  </channel>" >> appcast.xml
         echo "</rss>" >> appcast.xml
