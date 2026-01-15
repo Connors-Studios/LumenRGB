@@ -16,11 +16,26 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Get latest release tag (including prereleases)
+    - name: Get latest release tag (supports prereleases)
       run: |
-        TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases | jq -r '.[0].tag_name')
+        REPO="${{ github.repository }}"
+
+        # Fetch releases with authentication (prevents 404 + rate limits)
+        RELEASES=$(curl -s \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/$REPO/releases)
+
+        # Extract newest release tag safely
+        TAG=$(echo "$RELEASES" | jq -r 'if type=="array" and length>0 then .[0].tag_name else empty end')
+
+        if [ -z "$TAG" ]; then
+          echo "ERROR: No releases found"
+          exit 1
+        fi
+
         VERSION="${TAG#v}"
         VERSION_NUMERIC=$(echo "$VERSION" | sed 's/-.*//').0
+
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "VERSION_NUMERIC=$VERSION_NUMERIC" >> $GITHUB_ENV
