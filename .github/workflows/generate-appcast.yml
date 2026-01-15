@@ -1,0 +1,42 @@
+name: Generate Appcast
+
+permissions:
+  contents: write
+
+on:
+  workflow_run:
+    workflows: ["Build and Publish Release"]
+    types: [completed]
+
+jobs:
+  generate_appcast:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Extract version from tag
+      run: echo "VERSION=${{ github.event.workflow_run.head_branch#v }}" >> $GITHUB_ENV
+
+    - name: Generate appcast.xml
+      run: |
+        TAG="${{ github.event.workflow_run.head_branch }}"
+        echo "<rss version=\"2.0\" xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\">" > appcast.xml
+        echo "  <channel>" >> appcast.xml
+        echo "    <title>LumenRGB Updates</title>" >> appcast.xml
+        echo "    <item>" >> appcast.xml
+        echo "      <title>${VERSION}</title>" >> appcast.xml
+        echo "      <releaseNotes><![CDATA[Release notes available on GitHub]]></releaseNotes>" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-Setup-${VERSION}.exe\" />" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-${VERSION}.AppImage\" />" >> appcast.xml
+        echo "    </item>" >> appcast.xml
+        echo "  </channel>" >> appcast.xml
+        echo "</rss>" >> appcast.xml
+
+    - name: Upload appcast.xml
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.event.workflow_run.head_branch }}
+        files: appcast.xml
+        overwrite_files: true
