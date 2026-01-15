@@ -3,6 +3,9 @@
 ; ---------------------------------------
 !include "MUI2.nsh"
 
+!define MUI_ICON "LumenRGB_arc_256.ico"
+!define MUI_UNICON "LumenRGB_arc_256.ico"
+
 !define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_TEXT "Launch LumenRGB"
 !define MUI_FINISHPAGE_RUN_FUNCTION LaunchLumenRGB
