@@ -6,9 +6,8 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using LumenRGB.UI.Avalonia.ViewModels;
 using LumenRGB.UI.Avalonia.Views;
-using NetSparkleUpdater;
-using NetSparkleUpdater.Enums;
-using NetSparkleUpdater.SignatureVerifiers;
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,8 +15,6 @@ namespace LumenRGB.UI.Avalonia
 {
     public partial class App : Application
     {
-        private SparkleUpdater? _sparkle;
-
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -29,39 +26,18 @@ namespace LumenRGB.UI.Avalonia
             {
                 DisableAvaloniaDataAnnotationValidation();
 
+                // Linux cleanup for old AppImage
+                TryCleanupOldAppImage();
+
                 var splash = new StartupWindow();
                 desktop.MainWindow = splash;
                 splash.Show();
 
-                // Start background startup tasks
                 _ = Task.Run(async () =>
                 {
                     // --- UPDATE CHECK ---
                     splash.ViewModel.StatusText = "Checking updates";
-
-                    _sparkle = new SparkleUpdater(
-                        "https://github.com/Connors-Studios/LumenRGB/releases/latest/download/appcast.xml",
-                        new Ed25519Checker(SecurityMode.Unsafe, "") // replace with your real key later
-                    )
-                    {
-                        UserInteractionMode = UserInteractionMode.DownloadAndInstall,
-                        RelaunchAfterUpdate = true,
-                        UIFactory = null // REQUIRED for Avalonia (prevents WPF UI)
-                    };
-
-                    // REQUIRED when UIFactory = null
-                    _sparkle.CloseApplication += () =>
-                    {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-                            {
-                                desktopLifetime.Shutdown();
-                            }
-                        });
-                    };
-
-                    _ = _sparkle.StartLoop(true);
+                    await UpdateChecker.CheckForUpdatesAsync();   // NEW
 
                     // --- SPLASH SEQUENCE ---
                     await Task.Delay(800);
@@ -101,6 +77,21 @@ namespace LumenRGB.UI.Avalonia
             foreach (var plugin in toRemove)
             {
                 BindingPlugins.DataValidators.Remove(plugin);
+            }
+        }
+
+        private void TryCleanupOldAppImage()
+        {
+            try
+            {
+                var exe = Environment.ProcessPath!;
+                var old = exe + ".old";
+                if (File.Exists(old))
+                    File.Delete(old);
+            }
+            catch
+            {
+                // Silent fail
             }
         }
     }
