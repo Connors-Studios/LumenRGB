@@ -90,13 +90,9 @@ namespace LumenRGB.UI.Avalonia
                 var proc = Process.Start(new ProcessStartInfo
                 {
                     FileName = temp,
-                    Arguments = "/S",
+                    Arguments = "/S /L",
                     UseShellExecute = true
                 });
-
-                proc?.WaitForExit();
-
-                Process.Start(Environment.ProcessPath!);
 
                 Environment.Exit(0);
             }
