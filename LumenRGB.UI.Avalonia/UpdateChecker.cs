@@ -14,7 +14,6 @@ namespace LumenRGB.UI.Avalonia
     {
         private static readonly HttpClient _http = new();
 
-        // Add User-Agent ONCE (GitHub requires this)
         static UpdateChecker()
         {
             _http.DefaultRequestHeaders.UserAgent.ParseAdd("LumenRGB-Updater/1.0");
@@ -28,7 +27,11 @@ namespace LumenRGB.UI.Avalonia
             try
             {
                 var json = await _http.GetStringAsync(ManifestUrl);
-                var manifest = JsonSerializer.Deserialize<UpdateManifest>(json);
+
+                var manifest = JsonSerializer.Deserialize<UpdateManifest>(
+                    json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
 
                 if (manifest == null)
                     return;
@@ -47,7 +50,7 @@ namespace LumenRGB.UI.Avalonia
             }
             catch
             {
-                // Silent fail — app continues normally
+                // Silent fail
             }
         }
 
@@ -84,12 +87,16 @@ namespace LumenRGB.UI.Avalonia
                 var data = await _http.GetByteArrayAsync(url);
                 await File.WriteAllBytesAsync(temp, data);
 
-                Process.Start(new ProcessStartInfo
+                var proc = Process.Start(new ProcessStartInfo
                 {
                     FileName = temp,
                     Arguments = "/S",
                     UseShellExecute = true
                 });
+
+                proc?.WaitForExit();
+
+                Process.Start(Environment.ProcessPath!);
 
                 Environment.Exit(0);
             }
