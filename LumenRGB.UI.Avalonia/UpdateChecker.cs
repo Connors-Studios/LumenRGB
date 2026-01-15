@@ -14,7 +14,12 @@ namespace LumenRGB.UI.Avalonia
     {
         private static readonly HttpClient _http = new();
 
-        // Single manifest URL
+        // Add User-Agent ONCE (GitHub requires this)
+        static UpdateChecker()
+        {
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd("LumenRGB-Updater/1.0");
+        }
+
         private const string ManifestUrl =
             "https://github.com/Connors-Studios/LumenRGB/releases/latest/download/update.json";
 
@@ -75,10 +80,17 @@ namespace LumenRGB.UI.Avalonia
             try
             {
                 var temp = Path.Combine(Path.GetTempPath(), "LumenRGB-Update.exe");
+
                 var data = await _http.GetByteArrayAsync(url);
                 await File.WriteAllBytesAsync(temp, data);
 
-                Process.Start(temp, "/S");
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = temp,
+                    Arguments = "/S",
+                    UseShellExecute = true
+                });
+
                 Environment.Exit(0);
             }
             catch
