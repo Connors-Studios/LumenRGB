@@ -1,5 +1,9 @@
 # LumenRGB
 
+## Description
+
+LumenRGB is an application for controlling RGB LED devices. Currently under development.
+
 ## Licensing
 
 LumenRGB is dual‑licensed:
@@ -10,4 +14,4 @@ LumenRGB is dual‑licensed:
 If you cannot comply with the AGPL, you must obtain a commercial license.
 See `DUAL_LICENSE.md` and `COMMERCIAL_LICENSE.md` for details.
 
-For commercial licensing inquiries, contact Connor Studios.
+For commercial licensing inquiries, contact Connors Studios.
