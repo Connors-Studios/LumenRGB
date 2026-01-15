@@ -2,6 +2,10 @@
 ; Modern UI 2
 ; ---------------------------------------
 !include "MUI2.nsh"
+!include "FileFunc.nsh"
+!include "LogicLib.nsh"
+
+Var RelaunchAfterInstall
 
 !define MUI_ICON "LumenRGB_arc_256.ico"
 !define MUI_UNICON "LumenRGB_arc_256.ico"
@@ -9,6 +13,16 @@
 !define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_TEXT "Launch LumenRGB"
 !define MUI_FINISHPAGE_RUN_FUNCTION LaunchLumenRGB
+
+; ---------------------------------------
+; Detect /L flag (silent relaunch)
+; ---------------------------------------
+Function .onInit
+    StrCpy $R0 "$CMDLINE"
+
+    ; Detect /L flag
+    ${IfThen} ${CmdLineHas} "/L" ${|} StrCpy $RelaunchAfterInstall "1" ${|}
+FunctionEnd
 
 ; ---------------------------------------
 ; Installer Metadata
@@ -31,7 +45,7 @@ Icon "LumenRGB_arc_256.ico"
 UninstallIcon "LumenRGB_arc_256.ico"
 
 ; ---------------------------------------
-; Pages (Welcome → License → Directory → Install → Finish)
+; Pages
 ; ---------------------------------------
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
@@ -90,6 +104,18 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LumenRGB"
 SectionEnd
 
+; ---------------------------------------
+; Launch function (Finish page)
+; ---------------------------------------
 Function LaunchLumenRGB
   Exec "$INSTDIR\LumenRGB.exe"
+FunctionEnd
+
+; ---------------------------------------
+; Auto-launch after silent install (/L)
+; ---------------------------------------
+Function .onInstSuccess
+    ${If} $RelaunchAfterInstall == "1"
+        Exec "$INSTDIR\LumenRGB.exe"
+    ${EndIf}
 FunctionEnd
