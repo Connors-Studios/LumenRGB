@@ -20,8 +20,9 @@ Var RelaunchAfterInstall
 Function .onInit
     StrCpy $R0 "$CMDLINE"
 
-    ; Detect /L flag
-    ${IfThen} ${CmdLineHas} "/L" ${|} StrCpy $RelaunchAfterInstall "1" ${|}
+    ${If} ${CmdLineHas} "/L"
+        StrCpy $RelaunchAfterInstall "1"
+    ${EndIf}
 FunctionEnd
 
 ; ---------------------------------------
