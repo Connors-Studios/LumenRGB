@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Get latest release tag (supports prereleases)
+    - name: Get latest release tag and notes
       run: |
         REPO="${{ github.repository }}"
 
@@ -24,17 +24,18 @@ jobs:
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/$REPO/releases)
 
-        TAG=$(echo "$RELEASES" | jq -r 'if type=="array" and length>0 then .[0].tag_name else empty end')
-
-        if [ -z "$TAG" ]; then
-          echo "ERROR: No releases found"
-          exit 1
-        fi
-
+        TAG=$(echo "$RELEASES" | jq -r '.[0].tag_name')
         VERSION="${TAG#v}"
+        BODY=$(echo "$RELEASES" | jq -r '.[0].body // ""')
 
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+        {
+          echo "BODY<<EOF"
+          echo "$BODY"
+          echo "EOF"
+        } >> $GITHUB_ENV
 
     - name: Generate update.json
       run: |
@@ -42,7 +43,7 @@ jobs:
         {
           "version": "${VERSION}",
           "name": "LumenRGB ${VERSION}",
-          "notes": "Release notes available on GitHub.",
+          "notes": ${{ toJson(env.BODY) }},
           "files": [
             {
               "type": "installer-exe",
