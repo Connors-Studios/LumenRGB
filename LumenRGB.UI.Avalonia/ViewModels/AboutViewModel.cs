@@ -31,16 +31,20 @@ namespace LumenRGB.UI.Avalonia.ViewModels
 
         private static string GetBuildDate()
         {
-            var assembly = Assembly.GetEntryAssembly();
-            if (assembly == null)
-                return "Unknown";
+            try
+            {
+                var path = AppContext.BaseDirectory;
 
-            var path = assembly.Location;
-            if (!File.Exists(path))
-                return "Unknown";
+                if (string.IsNullOrWhiteSpace(path))
+                    return "Unknown";
 
-            var date = File.GetLastWriteTime(path);
-            return date.ToString("dd/MM/yyyy");
+                var date = Directory.GetLastWriteTime(path);
+                return date.ToString("dd/MM/yyyy");
+            }
+            catch
+            {
+                return "Unknown";
+            }
         }
 
         private static string GetOSInfo()

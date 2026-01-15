@@ -34,7 +34,7 @@ namespace LumenRGB.UI.Avalonia
                 splash.Show();
 
                 // Start background startup tasks
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     // --- UPDATE CHECK ---
                     splash.ViewModel.StatusText = "Checking updates";
@@ -61,7 +61,7 @@ namespace LumenRGB.UI.Avalonia
                         });
                     };
 
-                    _sparkle.StartLoop(true);
+                    _ = _sparkle.StartLoop(true);
 
                     // --- SPLASH SEQUENCE ---
                     await Task.Delay(800);
