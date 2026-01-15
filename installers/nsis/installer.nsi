@@ -11,7 +11,7 @@
 ; Installer Metadata
 ; ---------------------------------------
 OutFile "LumenRGB-Setup.exe"
-Name "LumenRGB Setup"
+Name "LumenRGB"
 InstallDir "$PROGRAMFILES\LumenRGB"
 InstallDirRegKey HKLM "Software\LumenRGB" "InstallLocation"
 
