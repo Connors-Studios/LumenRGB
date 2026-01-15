@@ -16,12 +16,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Extract version from tag
-      run: echo "VERSION=${{ github.event.workflow_run.head_branch#v }}" >> $GITHUB_ENV
+    - name: Extract version and tag
+      run: |
+        TAG="${{ github.event.workflow_run.head_branch }}"
+        VERSION="${TAG#v}"
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Generate appcast.xml
       run: |
-        TAG="${{ github.event.workflow_run.head_branch }}"
         echo "<rss version=\"2.0\" xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\">" > appcast.xml
         echo "  <channel>" >> appcast.xml
         echo "    <title>LumenRGB Updates</title>" >> appcast.xml
@@ -37,6 +40,6 @@ jobs:
     - name: Upload appcast.xml
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.event.workflow_run.head_branch }}
+        tag_name: ${{ env.TAG }}
         files: appcast.xml
         overwrite_files: true
