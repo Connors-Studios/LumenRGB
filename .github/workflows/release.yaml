@@ -141,13 +141,23 @@ jobs:
 
     - name: Download Windows installer
       run: |
-        wget -O LumenRGB-Setup-${VERSION}.exe \
-        "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup-${VERSION}.exe"
+        for i in {1..10}; do
+          wget -L --content-disposition --trust-server-names \
+            -O LumenRGB-Setup-${VERSION}.exe \
+            "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup-${VERSION}.exe" && break
+          echo "Windows installer not available yet. Retrying..."
+          sleep 3
+        done
 
     - name: Download AppImage
       run: |
-        wget -O LumenRGB-${VERSION}.AppImage \
-        "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-${VERSION}.AppImage"
+        for i in {1..10}; do
+          wget -L --content-disposition --trust-server-names \
+            -O LumenRGB-${VERSION}.AppImage \
+            "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-${VERSION}.AppImage" && break
+          echo "AppImage not available yet. Retrying..."
+          sleep 3
+        done
 
     - name: Compute SHA256 checksums
       run: |
