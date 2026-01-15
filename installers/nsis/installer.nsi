@@ -18,15 +18,36 @@ Var RelaunchAfterInstall
 ; Detect /L flag (silent relaunch)
 ; ---------------------------------------
 Function .onInit
-    ; Get full command line
+    ; Read full command line
     StrCpy $R0 "$CMDLINE"
 
-    ; Look for /L anywhere in the command line
-    FindStr $R1 $R0 "/L" 0
+    ; Default: no relaunch
+    StrCpy $RelaunchAfterInstall "0"
 
-    ${If} $R1 >= 0
+    ; Get length of command line
+    StrLen $R2 $R0
+
+    ; Start at index 0
+    StrCpy $R3 0
+
+    loop:
+        ; If index == length, stop
+        StrCmp $R3 $R2 done
+
+        ; Read 2 characters starting at index R3
+        StrCpy $R4 $R0 2 $R3
+
+        ; Compare to "/L"
+        StrCmp $R4 "/L" found
+
+        ; Move to next character
+        IntOp $R3 $R3 + 1
+        Goto loop
+
+    found:
         StrCpy $RelaunchAfterInstall "1"
-    ${EndIf}
+
+    done:
 FunctionEnd
 
 ; ---------------------------------------
