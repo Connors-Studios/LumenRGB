@@ -48,7 +48,7 @@ To purchase a commercial license, contact:
 
 
 
-\*\*Connor Studios\*\*  
+\*\*Connors Studios\*\*  
 
 Email: support@connorsstudios.net
 

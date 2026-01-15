@@ -1,0 +1,65 @@
+name: Generate Update Manifest
+
+permissions:
+  contents: write
+
+on:
+  workflow_run:
+    workflows: ["Build and Publish Release"]
+    types: [completed]
+
+jobs:
+  generate_manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get latest release tag and notes
+      run: |
+        REPO="${{ github.repository }}"
+
+        RELEASES=$(curl -s \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/$REPO/releases)
+
+        TAG=$(echo "$RELEASES" | jq -r '.[0].tag_name')
+        VERSION="${TAG#v}"
+        BODY=$(echo "$RELEASES" | jq -r '.[0].body // ""')
+
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+        {
+          echo "BODY<<EOF"
+          echo "$BODY"
+          echo "EOF"
+        } >> $GITHUB_ENV
+
+    - name: Generate update.json
+      run: |
+        cat <<EOF > update.json
+        {
+          "version": "${VERSION}",
+          "name": "LumenRGB ${VERSION}",
+          "notes": ${{ toJson(env.BODY) }},
+          "files": [
+            {
+              "type": "installer-exe",
+              "url": "https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-Setup-${VERSION}.exe"
+            },
+            {
+              "type": "appimage",
+              "url": "https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-${VERSION}.AppImage"
+            }
+          ]
+        }
+        EOF
+
+    - name: Upload update.json
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.TAG }}
+        files: update.json
+        overwrite_files: true
