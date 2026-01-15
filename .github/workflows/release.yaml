@@ -145,21 +145,6 @@ jobs:
     - name: Extract version from tag
       run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
 
-    - name: Fetch release asset metadata
-      id: assets
-      run: |
-        curl -s \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.release.tag_name }} \
-          -o release.json
-
-        WIN_SHA=$(jq -r '.assets[] | select(.name | contains("Setup")) | .sha256' release.json)
-        LINUX_SHA=$(jq -r '.assets[] | select(.name | contains("AppImage")) | .sha256' release.json)
-
-        echo "SHA_WIN=$WIN_SHA" >> $GITHUB_ENV
-        echo "SHA_LINUX=$LINUX_SHA" >> $GITHUB_ENV
-
     - name: Generate appcast.xml
       run: |
         echo "<rss version=\"2.0\" xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\">" > appcast.xml
@@ -168,8 +153,8 @@ jobs:
         echo "    <item>" >> appcast.xml
         echo "      <title>${VERSION}</title>" >> appcast.xml
         echo "      <releaseNotes><![CDATA[${{ github.event.release.body }}]]></releaseNotes>" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup-${VERSION}.exe\" sparkle:sha256=\"${SHA_WIN}\" />" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-${VERSION}.AppImage\" sparkle:sha256=\"${SHA_LINUX}\" />" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-Setup-${VERSION}.exe\" />" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/LumenRGB-${VERSION}.AppImage\" />" >> appcast.xml
         echo "    </item>" >> appcast.xml
         echo "  </channel>" >> appcast.xml
         echo "</rss>" >> appcast.xml
