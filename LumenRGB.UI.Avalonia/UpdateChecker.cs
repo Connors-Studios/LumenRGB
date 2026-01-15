@@ -10,18 +10,39 @@ using System.Linq;
 
 namespace LumenRGB.UI.Avalonia
 {
+    public enum UpdateChannel
+    {
+        Stable,
+        Beta
+    }
+
     public static class UpdateChecker
     {
         private static readonly HttpClient _http = new();
 
-        private const string ManifestUrl =
-            "https://github.com/Connors-Studios/LumenRGB/releases/latest/download/update.json";
+        // Default channel (you can change this or load from settings)
+        public static UpdateChannel Channel { get; set; } = UpdateChannel.Stable;
+
+        private static string GetManifestUrl()
+        {
+            return Channel switch
+            {
+                UpdateChannel.Beta =>
+                    "https://github.com/Connors-Studios/LumenRGB/releases/latest/download/update-beta.json",
+
+                UpdateChannel.Stable =>
+                    "https://github.com/Connors-Studios/LumenRGB/releases/latest/download/update-stable.json",
+
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
         public static async Task CheckForUpdatesAsync()
         {
             try
             {
-                var json = await _http.GetStringAsync(ManifestUrl);
+                var url = GetManifestUrl();
+                var json = await _http.GetStringAsync(url);
                 var manifest = JsonSerializer.Deserialize<UpdateManifest>(json);
 
                 if (manifest == null)
@@ -52,7 +73,10 @@ namespace LumenRGB.UI.Avalonia
                 var local = typeof(UpdateChecker).Assembly.GetName().Version?.ToString() ?? "0.0.0";
                 return string.Compare(remote, local, StringComparison.OrdinalIgnoreCase) > 0;
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
         }
 
         private static UpdateFile? SelectFileForPlatform(UpdateManifest manifest)
@@ -77,7 +101,10 @@ namespace LumenRGB.UI.Avalonia
                 Process.Start(temp, "/S");
                 Environment.Exit(0);
             }
-            catch { }
+            catch
+            {
+                // Silent fail
+            }
         }
 
         private static async Task UpdateLinuxAsync(string url)
@@ -89,21 +116,30 @@ namespace LumenRGB.UI.Avalonia
                 var old = exe + ".old";
                 var newFile = Path.Combine(dir, Path.GetFileName(exe));
 
+                // Rename running AppImage
                 File.Move(exe, old, true);
 
+                // Download new AppImage
                 var data = await _http.GetByteArrayAsync(url);
                 await File.WriteAllBytesAsync(newFile, data);
 
+                // Make executable
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = "chmod",
                     ArgumentList = { "+x", newFile }
-                }).WaitForExit();
+                })?.WaitForExit();
+
+                // Launch new version
                 Process.Start(newFile);
 
+                // Exit old version
                 Environment.Exit(0);
             }
-            catch { }
+            catch
+            {
+                // Silent fail
+            }
         }
     }
 
@@ -112,6 +148,7 @@ namespace LumenRGB.UI.Avalonia
         public string Version { get; set; }
         public string Name { get; set; }
         public string Notes { get; set; }
+        public bool Prerelease { get; set; }
         public List<UpdateFile> Files { get; set; }
     }
 
