@@ -16,9 +16,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Get latest release tag
+    - name: Get latest release tag (including prereleases)
       run: |
-        TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+        TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases | jq -r '.[0].tag_name')
         VERSION="${TAG#v}"
         VERSION_NUMERIC=$(echo "$VERSION" | sed 's/-.*//').0
         echo "TAG=$TAG" >> $GITHUB_ENV
@@ -51,6 +51,6 @@ jobs:
     - name: Upload appcast.xml
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: ${{ env.TAG }}
         files: appcast.xml
-        update_existing: true
         overwrite_files: true
