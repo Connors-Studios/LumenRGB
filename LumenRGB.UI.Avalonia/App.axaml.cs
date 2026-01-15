@@ -37,7 +37,6 @@ namespace LumenRGB.UI.Avalonia
                 {
                     // --- UPDATE CHECK ---
                     splash.ViewModel.StatusText = "Checking updates";
-                    UpdateChecker.Channel = UpdateChannel.Beta;
                     await UpdateChecker.CheckForUpdatesAsync();   // NEW
 
                     // --- SPLASH SEQUENCE ---
