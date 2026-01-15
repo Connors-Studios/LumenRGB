@@ -2,7 +2,7 @@
 
 namespace LumenRGB.UI.Avalonia.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public partial class SettingsViewModel : ViewModelBase
     {
     }
 }

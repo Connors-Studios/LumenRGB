@@ -16,24 +16,35 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Extract version and tag
+    - name: Get latest release tag
       run: |
-        TAG="${{ github.event.workflow_run.head_branch }}"
+        TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
         VERSION="${TAG#v}"
+        VERSION_NUMERIC=$(echo "$VERSION" | sed 's/-.*//').0
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "VERSION_NUMERIC=$VERSION_NUMERIC" >> $GITHUB_ENV
 
     - name: Generate appcast.xml
       run: |
         echo "<rss version=\"2.0\" xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\">" > appcast.xml
         echo "  <channel>" >> appcast.xml
         echo "    <title>LumenRGB Updates</title>" >> appcast.xml
+
+        # Windows item
         echo "    <item>" >> appcast.xml
         echo "      <title>${VERSION}</title>" >> appcast.xml
         echo "      <releaseNotes><![CDATA[Release notes available on GitHub]]></releaseNotes>" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-Setup-${VERSION}.exe\" />" >> appcast.xml
-        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-${VERSION}.AppImage\" />" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-Setup-${VERSION}.exe\" sparkle:version=\"${VERSION_NUMERIC}\" />" >> appcast.xml
         echo "    </item>" >> appcast.xml
+
+        # Linux item
+        echo "    <item>" >> appcast.xml
+        echo "      <title>${VERSION}</title>" >> appcast.xml
+        echo "      <releaseNotes><![CDATA[Release notes available on GitHub]]></releaseNotes>" >> appcast.xml
+        echo "      <enclosure url=\"https://github.com/${{ github.repository }}/releases/download/${TAG}/LumenRGB-${VERSION}.AppImage\" sparkle:version=\"${VERSION_NUMERIC}\" />" >> appcast.xml
+        echo "    </item>" >> appcast.xml
+
         echo "  </channel>" >> appcast.xml
         echo "</rss>" >> appcast.xml
 

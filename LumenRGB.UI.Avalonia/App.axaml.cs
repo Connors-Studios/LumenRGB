@@ -3,16 +3,21 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using LumenRGB.UI.Avalonia.ViewModels;
 using LumenRGB.UI.Avalonia.Views;
+using NetSparkleUpdater;
+using NetSparkleUpdater.Enums;
+using NetSparkleUpdater.SignatureVerifiers;
 using System.Linq;
-using Avalonia.Threading;
 using System.Threading.Tasks;
 
 namespace LumenRGB.UI.Avalonia
 {
     public partial class App : Application
     {
+        private SparkleUpdater? _sparkle;
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -22,18 +27,44 @@ namespace LumenRGB.UI.Avalonia
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
 
                 var splash = new StartupWindow();
                 desktop.MainWindow = splash;
                 splash.Show();
 
+                // Start background startup tasks
                 Task.Run(async () =>
                 {
-                    await Task.Delay(800);
+                    // --- UPDATE CHECK ---
+                    splash.ViewModel.StatusText = "Checking updates";
 
+                    _sparkle = new SparkleUpdater(
+                        "https://github.com/Connors-Studios/LumenRGB/releases/latest/download/appcast.xml",
+                        new Ed25519Checker(SecurityMode.Unsafe, "") // replace with your real key later
+                    )
+                    {
+                        UserInteractionMode = UserInteractionMode.DownloadAndInstall,
+                        RelaunchAfterUpdate = true,
+                        UIFactory = null // REQUIRED for Avalonia (prevents WPF UI)
+                    };
+
+                    // REQUIRED when UIFactory = null
+                    _sparkle.CloseApplication += () =>
+                    {
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+                            {
+                                desktopLifetime.Shutdown();
+                            }
+                        });
+                    };
+
+                    _sparkle.StartLoop(true);
+
+                    // --- SPLASH SEQUENCE ---
+                    await Task.Delay(800);
                     splash.ViewModel.StatusText = "Loading modules.";
                     await Task.Delay(800);
 
@@ -43,6 +74,7 @@ namespace LumenRGB.UI.Avalonia
                     splash.ViewModel.StatusText = "Starting...";
                     await Task.Delay(800);
 
+                    // Switch to main window
                     Dispatcher.UIThread.Post(() =>
                     {
                         var main = new MainWindow
@@ -62,12 +94,11 @@ namespace LumenRGB.UI.Avalonia
 
         private void DisableAvaloniaDataAnnotationValidation()
         {
-            // Get an array of plugins to remove
-            var dataValidationPluginsToRemove =
-                BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+            var toRemove = BindingPlugins.DataValidators
+                .OfType<DataAnnotationsValidationPlugin>()
+                .ToArray();
 
-            // remove each entry found
-            foreach (var plugin in dataValidationPluginsToRemove)
+            foreach (var plugin in toRemove)
             {
                 BindingPlugins.DataValidators.Remove(plugin);
             }

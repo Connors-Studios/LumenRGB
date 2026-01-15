@@ -2,7 +2,7 @@
 
 namespace LumenRGB.UI.Avalonia.ViewModels
 {
-    public partial class StartupViewModel : ObservableObject
+    public partial class StartupViewModel : ViewModelBase
     {
         [ObservableProperty]
         private string statusText = "Starting";
