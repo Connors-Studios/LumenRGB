@@ -160,16 +160,16 @@ namespace LumenRGB.UI.Avalonia
     // Update manifest structure
     public class UpdateManifest
     {
-        public string Version { get; set; }
-        public string Name { get; set; }
-        public string Notes { get; set; }
-        public List<UpdateFile> Files { get; set; }
+        public required string Version { get; set; }
+        public required string Name { get; set; }
+        public required string Notes { get; set; }
+        public required List<UpdateFile> Files { get; set; }
     }
 
     // Update file structure
     public class UpdateFile
     {
-        public string Type { get; set; }
-        public string Url { get; set; }
+        public required string Type { get; set; }
+        public required string Url { get; set; }
     }
 }
