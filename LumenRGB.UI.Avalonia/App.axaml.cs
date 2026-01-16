@@ -26,29 +26,20 @@ namespace LumenRGB.UI.Avalonia
             {
                 DisableAvaloniaDataAnnotationValidation();
 
-                // Linux cleanup for old AppImage
+                // Linux clean up for old AppImage
                 TryCleanupOldAppImage();
 
+                // Show splash screen
                 var splash = new StartupWindow();
                 desktop.MainWindow = splash;
                 splash.Show();
 
+                // Launch task
                 _ = Task.Run(async () =>
                 {
-                    // --- UPDATE CHECK ---
-                    splash.ViewModel.StatusText = "Checking updates";
-                    await UpdateChecker.CheckForUpdatesAsync();   // NEW
-
-                    // --- SPLASH SEQUENCE ---
-                    await Task.Delay(800);
-                    splash.ViewModel.StatusText = "Loading modules.";
-                    await Task.Delay(800);
-
-                    splash.ViewModel.StatusText = "Initializing UI..";
-                    await Task.Delay(800);
-
-                    splash.ViewModel.StatusText = "Starting...";
-                    await Task.Delay(800);
+                    // Check for updates
+                    splash.ViewModel.StatusText = "Checking for updates";
+                    await UpdateChecker.CheckForUpdatesAsync();
 
                     // Switch to main window
                     Dispatcher.UIThread.Post(() =>
@@ -80,10 +71,12 @@ namespace LumenRGB.UI.Avalonia
             }
         }
 
+        // Cleans up old AppImage files on Linux systems
         private void TryCleanupOldAppImage()
         {
             try
             {
+                // Delete old AppImage if exists
                 var exe = Environment.ProcessPath!;
                 var old = exe + ".old";
                 if (File.Exists(old))
