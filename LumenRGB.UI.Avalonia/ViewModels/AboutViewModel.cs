@@ -8,27 +8,24 @@ namespace LumenRGB.UI.Avalonia.ViewModels
 {
     public partial class AboutViewModel : ViewModelBase
     {
+        // Version information
         [ObservableProperty]
-        private string displayVersion =
-            "Version: " +
-            (Assembly.GetEntryAssembly()?
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-                .InformationalVersion
-                ?? "Unknown");
+        private string displayVersion = "Version: " + (Assembly.GetEntryAssembly()?
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?? "Unknown");
 
+        // Build date information
         [ObservableProperty]
-        private string buildDate =
-            "Build Date: " +
-            GetBuildDate();
+        private string buildDate = "Build Date: " + GetBuildDate();
 
+        // OS information
         [ObservableProperty]
-        private string osInfo =
-            "OS: " + GetOSInfo();
+        private string osInfo = "OS: " + GetOSInfo();
 
+        // Runtime information
         [ObservableProperty]
-        private string runtimeInfo =
-            "Runtime: " + GetRuntimeInfo();
+        private string runtimeInfo = "Runtime: " + GetRuntimeInfo();
 
+        // Helper method to get build date and format it as dd/MM/yyyy
         private static string GetBuildDate()
         {
             try
@@ -47,18 +44,18 @@ namespace LumenRGB.UI.Avalonia.ViewModels
             }
         }
 
+        // Helper method to get OS information
         private static string GetOSInfo()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 return "Windows";
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 return "Linux";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                return "macOS";
 
             return "Unknown OS";
         }
 
+        // Helper method to get runtime information
         private static string GetRuntimeInfo()
         {
             return RuntimeInformation.FrameworkDescription;
