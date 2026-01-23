@@ -40,11 +40,13 @@
 
                 <Button Classes="sidebar"
                         Content="Home"
-                        Command="{Binding NavigateHomeCommand}"/>
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Home"/>
 
                 <Button Classes="sidebar"
                         Content="Devices"
-                        Command="{Binding NavigateDevicesCommand}"/>
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Devices"/>
 
             </StackPanel>
 
@@ -56,11 +58,13 @@
 
                 <Button Classes="sidebar"
                         Content="Settings"
-                        Command="{Binding NavigateSettingsCommand}"/>
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Settings"/>
 
                 <Button Classes="sidebar"
                         Content="About"
-                        Command="{Binding NavigateAboutCommand}"/>
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="About"/>
 
             </StackPanel>
 

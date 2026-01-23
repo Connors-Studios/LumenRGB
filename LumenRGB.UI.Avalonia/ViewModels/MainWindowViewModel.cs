@@ -7,49 +7,34 @@ namespace LumenRGB.UI.Avalonia.ViewModels
     {
         // The current page/viewmodel being displayed
         [ObservableProperty]
-        private object currentPage;
+        private object currentPage = null!;
 
         // The currently selected page name
         [ObservableProperty]
-        private string selectedPage;
+        private string selectedPage = null!;
 
         public MainWindowViewModel()
         {
             // Set the default page to Home
-            SelectedPage = "Home";
-            CurrentPage = new HomeViewModel();
+            Navigate("Home");
         }
 
-        // Home navigation command
         [RelayCommand]
-        private void NavigateHome()
+        private void Navigate(string page)
         {
-            SelectedPage = "Home";
-            CurrentPage = new HomeViewModel();
-        }
+            if (SelectedPage == page)
+                return;
 
-        // Devices navigation command
-        [RelayCommand]
-        private void NavigateDevices()
-        {
-            SelectedPage = "Devices";
-            CurrentPage = new DevicesViewModel();
-        }
+            SelectedPage = page;
 
-        // Settings navigation command
-        [RelayCommand]
-        private void NavigateSettings()
-        {
-            SelectedPage = "Settings";
-            CurrentPage = new SettingsViewModel();
-        }
-
-        // About navigation command
-        [RelayCommand]
-        private void NavigateAbout()
-        {
-            SelectedPage = "About";
-            CurrentPage = new AboutViewModel();
+            CurrentPage = page switch
+            {
+                "Home" => new HomeViewModel(),
+                "Devices" => new DevicesViewModel(),
+                "Settings" => new SettingsViewModel(),
+                "About" => new AboutViewModel(),
+                _ => new HomeViewModel(),
+            };
         }
     }
 }
