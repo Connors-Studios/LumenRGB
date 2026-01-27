@@ -1,3 +1,5 @@
+![LumenRGB Arc with LumenRGB text below.](https://github.com/Connors-Studios/LumenRGB/blob/master/Resources/LumenRGB_Dark_256.png "LumenRGB")
+
 # LumenRGB
 
 ## Description
