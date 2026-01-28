@@ -1,9 +1,9 @@
 <Solution>
   <Project Path="LumenRGB.Core/LumenRGB.Core.csproj" />
   <Project Path="LumenRGB.Devices/LumenRGB.Devices.csproj" />
+  <Project Path="LumenRGB.UI.Avalonia.Desktop/LumenRGB.UI.Avalonia.Desktop.csproj" />
   <Project Path="LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj" Id="31ab60b4-981e-4a80-b6bd-7d20b0fab19e">
     <Deploy />
   </Project>
   <Project Path="LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.csproj" Id="2dd61c38-824e-42a9-8351-fd98be742290" />
-  <Project Path="LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj" Id="5b3dc26f-9104-4c15-8c39-f954f894e34a" />
 </Solution>

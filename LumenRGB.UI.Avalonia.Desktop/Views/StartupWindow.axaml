@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gif="clr-namespace:Avalonia.Labs.Gif;assembly=Avalonia.Labs.Gif"
-        xmlns:vm="clr-namespace:LumenRGB.UI.Avalonia.ViewModels"
+        xmlns:vm="clr-namespace:LumenRGB.UI.Avalonia.Desktop.ViewModels"
         x:DataType="vm:StartupViewModel"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="450"
@@ -13,7 +13,7 @@
         Background="#1A1A1A"
         TransparencyLevelHint="AcrylicBlur"
         SystemDecorations="None"
-        x:Class="LumenRGB.UI.Avalonia.StartupWindow"
+        x:Class="LumenRGB.UI.Avalonia.Desktop.StartupWindow"
         Icon="/Assets/LumenRGB_arc_256.ico"
         Title="LumenRGB">
     <Window.Styles>
@@ -33,7 +33,7 @@
 </Window.Styles>
     <Grid>
         <StackPanel VerticalAlignment="Center">
-            <gif:GifImage Source="avares://LumenRGB.UI.Avalonia/Assets/arc.gif"
+            <gif:GifImage Source="avares://LumenRGB.UI.Avalonia.Desktop/Assets/arc.gif"
                           Width="128"
                           Stretch="Uniform"
                           HorizontalAlignment="Center"/>

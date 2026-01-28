@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace LumenRGB.UI.Avalonia.ViewModels
+namespace LumenRGB.UI.Avalonia.Desktop.ViewModels
 {
     public abstract class ViewModelBase : ObservableObject
     {

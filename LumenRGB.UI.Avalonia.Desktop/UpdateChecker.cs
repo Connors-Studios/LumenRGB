@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace LumenRGB.UI.Avalonia
+namespace LumenRGB.UI.Avalonia.Desktop
 {
     public static class UpdateChecker
     {

@@ -1,9 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using LumenRGB.UI.Avalonia.ViewModels;
+using LumenRGB.UI.Avalonia.Desktop.ViewModels;
 
-namespace LumenRGB.UI.Avalonia;
+namespace LumenRGB.UI.Avalonia.Desktop;
 
 public partial class StartupWindow : Window
 {

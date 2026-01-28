@@ -1,10 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using LumenRGB.UI.Avalonia.ViewModels;
+using LumenRGB.UI.Avalonia.Desktop.ViewModels;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace LumenRGB.UI.Avalonia
+namespace LumenRGB.UI.Avalonia.Desktop
 {
     /// <summary>
     /// Given a view model, returns the corresponding view if possible.

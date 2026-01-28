@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace LumenRGB.UI.Avalonia.ViewModels
+namespace LumenRGB.UI.Avalonia.Desktop.ViewModels
 {
     public partial class AboutViewModel : ViewModelBase
     {

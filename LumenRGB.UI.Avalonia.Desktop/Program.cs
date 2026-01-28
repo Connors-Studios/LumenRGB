@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace LumenRGB.UI.Avalonia
+namespace LumenRGB.UI.Avalonia.Desktop
 {
     internal sealed class Program
     {

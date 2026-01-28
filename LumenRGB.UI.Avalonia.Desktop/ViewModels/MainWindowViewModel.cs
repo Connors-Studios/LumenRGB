@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace LumenRGB.UI.Avalonia.ViewModels
+namespace LumenRGB.UI.Avalonia.Desktop.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {

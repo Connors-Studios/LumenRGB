@@ -4,14 +4,14 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using LumenRGB.UI.Avalonia.ViewModels;
-using LumenRGB.UI.Avalonia.Views;
+using LumenRGB.UI.Avalonia.Desktop.ViewModels;
+using LumenRGB.UI.Avalonia.Desktop.Views;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LumenRGB.UI.Avalonia
+namespace LumenRGB.UI.Avalonia.Desktop
 {
     public partial class App : Application
     {
