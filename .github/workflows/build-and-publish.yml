@@ -130,7 +130,6 @@ jobs:
 
   android_apk:
     runs-on: ubuntu-latest
-    needs: build
 
     steps:
     - name: Checkout
