@@ -11,6 +11,6 @@
   
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="avares://LumenRGB.UI.Avalonia.Desktop/Styles/SidebarStyles.axaml"/>
+        <StyleInclude Source="avares://LumenRGB/Styles/SidebarStyles.axaml"/>
     </Application.Styles>
 </Application>

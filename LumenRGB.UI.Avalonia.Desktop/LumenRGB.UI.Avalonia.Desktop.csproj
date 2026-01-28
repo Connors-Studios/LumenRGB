@@ -6,17 +6,13 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<ApplicationIcon>Assets\LumenRGB_arc_256.ico</ApplicationIcon>
+	<AssemblyName>LumenRGB</AssemblyName>
+	<ExecutableName>LumenRGB</ExecutableName>
+	<ApplicationTitle>LumenRGB</ApplicationTitle>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AvaloniaXaml Remove="Models\**" />
-    <Compile Remove="Models\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <None Remove="Models\**" />
   </ItemGroup>
 	
   <ItemGroup>

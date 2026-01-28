@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace LumenRGB.UI.Avalonia.Mobile.Android
 {
     [Activity(
-        Label = "LumenRGB.UI.Avalonia.Mobile.Android",
+        Label = "LumenRGB",
         Theme = "@style/MyTheme.NoActionBar",
         Icon = "@drawable/icon",
         MainLauncher = true,

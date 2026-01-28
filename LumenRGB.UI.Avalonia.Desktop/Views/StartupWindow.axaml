@@ -33,7 +33,7 @@
 </Window.Styles>
     <Grid>
         <StackPanel VerticalAlignment="Center">
-            <gif:GifImage Source="avares://LumenRGB.UI.Avalonia.Desktop/Assets/arc.gif"
+            <gif:GifImage Source="avares://LumenRGB/Assets/arc.gif"
                           Width="128"
                           Stretch="Uniform"
                           HorizontalAlignment="Center"/>

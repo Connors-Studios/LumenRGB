@@ -6,7 +6,7 @@
         xmlns:views="using:LumenRGB.UI.Avalonia.Mobile.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LumenRGB.UI.Avalonia.Mobile.Views.MainWindow"
-        Icon="/Assets/LumenRGB_arc_256.ico"
+        Icon="/Assets/LumenRGB_arc_flat_256.ico"
         Title="LumenRGB.UI.Avalonia.Mobile">
         <views:MainView />
 </Window>
