@@ -33,7 +33,7 @@
 </Window.Styles>
     <Grid>
         <StackPanel VerticalAlignment="Center">
-            <gif:GifImage Source="avares://LumenRGB/Assets/arc.gif"
+            <gif:GifImage Source="avares://LumenRGB/Assets/LumenRGB_arc_animated.gif"
                           Width="128"
                           Stretch="Uniform"
                           HorizontalAlignment="Center"/>
