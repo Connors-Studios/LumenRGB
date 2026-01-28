@@ -28,7 +28,7 @@ jobs:
         dotnet-version: "8.0.x"
 
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore LumenRGB.UI.Avalonia.Desktop/LumenRGB.UI.Avalonia.Desktop.csproj
 
     - name: Publish self-contained
       run: |
