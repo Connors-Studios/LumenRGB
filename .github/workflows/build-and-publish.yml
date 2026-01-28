@@ -148,11 +148,11 @@ jobs:
       run: dotnet workload install android
 
     - name: Restore
-      run: dotnet restore LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj
+      run: dotnet restore LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj
 
     - name: Build unsigned APK
       run: |
-        dotnet publish LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj \
+        dotnet publish LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj \
           -c Release \
           -f net8.0-android \
           -p:Version=${{ env.VERSION }} \
