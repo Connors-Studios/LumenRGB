@@ -41,6 +41,10 @@ namespace LumenRGB.UI.Avalonia.Mobile
         protected override void OnAttached()
         {
             base.OnAttached();
+
+            if (AssociatedObject is null)
+                return;
+
             AssociatedObject.PointerPressed += OnPressed;
             AssociatedObject.PointerMoved += OnMoved;
             AssociatedObject.PointerReleased += OnReleased;
@@ -49,6 +53,10 @@ namespace LumenRGB.UI.Avalonia.Mobile
         protected override void OnDetaching()
         {
             base.OnDetaching();
+
+            if (AssociatedObject is null)
+                return;
+
             AssociatedObject.PointerPressed -= OnPressed;
             AssociatedObject.PointerMoved -= OnMoved;
             AssociatedObject.PointerReleased -= OnReleased;
@@ -56,7 +64,7 @@ namespace LumenRGB.UI.Avalonia.Mobile
 
         private void OnPressed(object? sender, PointerPressedEventArgs e)
         {
-            _start = e.GetPosition(AssociatedObject);
+            _start = e.GetPosition(AssociatedObject!);
 
             // Only start swipe-to-open if touch begins at left edge
             if (!IsMenuOpen && _start.X > 30)
@@ -75,7 +83,7 @@ namespace LumenRGB.UI.Avalonia.Mobile
             if (!_tracking)
                 return;
 
-            var pos = e.GetPosition(AssociatedObject);
+            var pos = e.GetPosition(AssociatedObject!);
             var deltaX = pos.X - _start.X;
             var deltaY = pos.Y - _start.Y;
 
