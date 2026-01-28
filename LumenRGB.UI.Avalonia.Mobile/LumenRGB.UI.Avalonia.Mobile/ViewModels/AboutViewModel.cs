@@ -1,17 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace LumenRGB.UI.Avalonia.Desktop.ViewModels
+namespace LumenRGB.UI.Avalonia.Mobile.ViewModels
 {
     public partial class AboutViewModel : ViewModelBase
     {
         // Version information
         [ObservableProperty]
         private string displayVersion = "Version: " + (Assembly.GetExecutingAssembly()?
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?? "Unknown");
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "Unknown");
 
         // Build date information
         [ObservableProperty]
