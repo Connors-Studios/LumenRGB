@@ -28,7 +28,7 @@ jobs:
         dotnet-version: "8.0.x"
 
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore LumenRGB.UI.Avalonia.Desktop/LumenRGB.UI.Avalonia.Desktop.csproj
 
     - name: Publish self-contained
       run: |
@@ -150,9 +150,6 @@ jobs:
     - name: Restore
       run: dotnet restore LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj
 
-    # -----------------------------
-    # BUILD UNSIGNED APK
-    # -----------------------------
     - name: Build unsigned APK
       run: |
         dotnet publish LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj \
@@ -161,9 +158,6 @@ jobs:
           -p:Version=${{ env.VERSION }} \
           -p:AndroidPackageFormat=apk
 
-    # -----------------------------
-    # UPLOAD APK TO RELEASE
-    # -----------------------------
     - name: Upload APKs
       uses: softprops/action-gh-release@v2
       with:
