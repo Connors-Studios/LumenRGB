@@ -7,6 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LumenRGB.UI.Avalonia.Mobile.Views.MainWindow"
         Icon="/Assets/LumenRGB_arc_256.ico"
-        Title="LumenRGB.UI.Avalonia.Mobile">
+        Title="LumenRGB"
+        Background="#1A1A1A">
         <views:MainView />
 </Window>

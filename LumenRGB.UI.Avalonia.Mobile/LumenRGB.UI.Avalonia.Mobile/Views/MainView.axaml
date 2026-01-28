@@ -1,16 +1,131 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:LumenRGB.UI.Avalonia.Mobile.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:anim="using:Avalonia.Animation"
+             xmlns:controls="using:Avalonia.Controls"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:local="using:LumenRGB.UI.Avalonia.Mobile"
              x:Class="LumenRGB.UI.Avalonia.Mobile.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- TOP BAR -->
+        <Grid Background="Transparent">
+            <Button Content="Menu"
+                    Command="{Binding ToggleMenuCommand}"
+                    FontSize="24"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="10"/>
+        </Grid>
+
+        <!-- MAIN CONTENT -->
+        <Grid Grid.Row="1">
+
+            <!-- LEFT EDGE SWIPE-TO-OPEN -->
+            <Border Width="30"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    IsHitTestVisible="{Binding IsMenuOpen, Converter={StaticResource InverseBoolConverter}}">
+                <i:Interaction.Behaviors>
+                    <local:SwipeBehavior IsMenuOpen="{Binding IsMenuOpen}"
+                                         Command="{Binding ToggleMenuCommand}" />
+                </i:Interaction.Behaviors>
+            </Border>
+
+            <!-- PAGE CONTENT -->
+            <controls:TransitioningContentControl Margin="10"
+                                                  Content="{Binding CurrentPage}">
+                <controls:TransitioningContentControl.PageTransition>
+                    <anim:CrossFade Duration="0:0:0.25"/>
+                </controls:TransitioningContentControl.PageTransition>
+            </controls:TransitioningContentControl>
+        </Grid>
+
+        <!-- OVERLAY -->
+        <Grid Grid.RowSpan="2"
+              Opacity="{Binding IsMenuOpen, Converter={StaticResource MenuOpacityConverter}}"
+              Background="#00000000"
+              ZIndex="200"
+              IsHitTestVisible="{Binding IsMenuOpen}">
+
+            <Grid.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.25"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.25"/>
+                </Transitions>
+            </Grid.Transitions>
+
+            <Grid.Styles>
+                <Style Selector="Grid">
+                    <Setter Property="Background" Value="#00000000"/>
+                </Style>
+                <Style Selector="Grid[Opacity=1]">
+                    <Setter Property="Background" Value="#80000000"/>
+                </Style>
+            </Grid.Styles>
+
+            <Grid ColumnDefinitions="Auto,*">
+
+                <!-- SIDEBAR -->
+                <Grid Background="#222"
+                      Width="120"
+                      Margin="{Binding IsMenuOpen, Converter={StaticResource MenuMarginConverter}}">
+
+                    <!-- SWIPE LEFT TO CLOSE -->
+                    <i:Interaction.Behaviors>
+                        <local:SwipeBehavior IsMenuOpen="{Binding IsMenuOpen}"
+                                             Command="{Binding ToggleMenuCommand}" />
+                    </i:Interaction.Behaviors>
+
+                    <Grid.Transitions>
+                        <Transitions>
+                            <ThicknessTransition Property="Margin" Duration="0:0:0.25"/>
+                        </Transitions>
+                    </Grid.Transitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,10">
+                        <Button Classes="sidebar" Content="Home"
+                                Command="{Binding NavigateCommand}" CommandParameter="Home"/>
+                        <Button Classes="sidebar" Content="Devices"
+                                Command="{Binding NavigateCommand}" CommandParameter="Devices"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="1"/>
+
+                    <StackPanel Grid.Row="2" Spacing="6" Margin="0,10,0,0">
+                        <Button Classes="sidebar" Content="Settings"
+                                Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
+                        <Button Classes="sidebar" Content="About"
+                                Command="{Binding NavigateCommand}" CommandParameter="About"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- TAP OUTSIDE TO CLOSE -->
+                <Border Background="Transparent"
+                        Grid.Column="1"
+                        Cursor="Hand">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="PointerPressed">
+                            <ia:InvokeCommandAction Command="{Binding ToggleMenuCommand}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </Border>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
 </UserControl>

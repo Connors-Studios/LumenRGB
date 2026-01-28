@@ -8,8 +8,13 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-
+    <Application.Resources>
+        <local:MenuMarginConverter x:Key="MenuMarginConverter"/>
+        <local:MenuOpacityConverter x:Key="MenuOpacityConverter"/>
+        <local:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </Application.Resources>
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://LumenRGB.UI.Avalonia.Mobile/Styles/SidebarStyles.axaml"/>
     </Application.Styles>
 </Application>
