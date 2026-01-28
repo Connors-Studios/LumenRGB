@@ -158,14 +158,17 @@ jobs:
           -p:Version=${{ env.VERSION }} \
           -p:AndroidPackageFormat=apk
     
-    - name: Debug APK output
+    - name: Rename APKs
       run: |
-        echo "Listing Android output:"
-        ls -R LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/
+        cd LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/net8.0-android
+        mv com.ConnorsStudios.LumenRGB.apk LumenRGB-${{ env.VERSION }}-unsigned.apk
+        mv com.ConnorsStudios.LumenRGB-Signed.apk LumenRGB-${{ env.VERSION }}-signed.apk
+
 
     - name: Upload APKs
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          LumenRGB-${{ env.VERSION }}-unsigned.apk
+          LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/net8.0-android/LumenRGB-${{ env.VERSION }}-signed.apk
+          LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/net8.0-android/LumenRGB-${{ env.VERSION }}-unsigned.apk
         overwrite_files: true
