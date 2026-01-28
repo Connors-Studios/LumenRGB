@@ -157,6 +157,11 @@ jobs:
           -f net8.0-android \
           -p:Version=${{ env.VERSION }} \
           -p:AndroidPackageFormat=apk
+    
+    - name: Debug APK output
+      run: |
+        echo "Listing Android output:"
+        ls -R LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/
 
     - name: Upload APKs
       uses: softprops/action-gh-release@v2
