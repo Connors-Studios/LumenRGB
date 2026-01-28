@@ -66,7 +66,7 @@ namespace LumenRGB.UI.Avalonia.Mobile
         {
             _start = e.GetPosition(AssociatedObject!);
 
-            // Only start swipe-to-open if touch begins at left edge
+            // Only start swipe-to-open if touch begins at left edge.
             if (!IsMenuOpen && _start.X > 30)
             {
                 _tracking = false;
