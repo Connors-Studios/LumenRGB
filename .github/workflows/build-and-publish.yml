@@ -28,10 +28,11 @@ jobs:
         dotnet-version: "8.0.x"
 
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore LumenRGB.UI.Avalonia.Desktop/LumenRGB.UI.Avalonia.Desktop.csproj
+
     - name: Publish self-contained
       run: |
-        dotnet publish LumenRGB.UI.Avalonia/LumenRGB.UI.Avalonia.csproj \
+        dotnet publish LumenRGB.UI.Avalonia.Desktop/LumenRGB.UI.Avalonia.Desktop.csproj \
           -c Release \
           -r ${{ matrix.rid }} \
           --self-contained true \
@@ -43,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: publish-${{ matrix.rid }}
-        path: LumenRGB.UI.Avalonia/bin/Release/net8.0/${{ matrix.rid }}/publish/
+        path: LumenRGB.UI.Avalonia.Desktop/bin/Release/net8.0/${{ matrix.rid }}/publish/
 
   windows_installer:
     runs-on: ubuntu-latest
@@ -64,9 +65,6 @@ jobs:
       with:
         name: publish-win-x64
         path: publish
-
-    - name: Rename Windows executable
-      run: mv publish/LumenRGB.UI.Avalonia.exe publish/LumenRGB.exe
 
     - name: Install NSIS
       run: sudo apt-get update && sudo apt-get install -y nsis
@@ -99,9 +97,6 @@ jobs:
         name: publish-linux-x64
         path: installers/appimage/AppDir/usr/bin
 
-    - name: Rename Linux executable
-      run: mv installers/appimage/AppDir/usr/bin/LumenRGB.UI.Avalonia installers/appimage/AppDir/usr/bin/LumenRGB
-
     - name: Prepare AppDir
       run: |
         chmod +x installers/appimage/AppDir/usr/bin/LumenRGB
@@ -132,3 +127,47 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: LumenRGB-${{ env.VERSION }}.AppImage
+
+  android_apk:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Extract version from tag
+      run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "8.0.x"
+
+    - name: Install Android workload
+      run: dotnet workload install android
+
+    - name: Restore
+      run: dotnet restore LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj
+
+    - name: Build unsigned APK
+      run: |
+        dotnet publish LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/LumenRGB.UI.Avalonia.Mobile.Android.csproj \
+          -c Release \
+          -f net8.0-android \
+          -p:Version=${{ env.VERSION }} \
+          -p:AndroidPackageFormat=apk
+    
+    - name: Rename APKs
+      run: |
+        cd LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/net8.0-android
+        mv com.ConnorsStudios.LumenRGB.apk LumenRGB-${{ env.VERSION }}-unsigned.apk
+        mv com.ConnorsStudios.LumenRGB-Signed.apk LumenRGB-${{ env.VERSION }}-signed.apk
+
+
+    - name: Upload APKs
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/net8.0-android/LumenRGB-${{ env.VERSION }}-signed.apk
+          LumenRGB.UI.Avalonia.Mobile/LumenRGB.UI.Avalonia.Mobile.Android/bin/Release/net8.0-android/LumenRGB-${{ env.VERSION }}-unsigned.apk
+        overwrite_files: true

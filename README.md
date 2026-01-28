@@ -6,6 +6,8 @@
 
 LumenRGB is an application for controlling RGB LED devices. Currently under development.
 
+Desktop supports full control of LumenRGB devices through USB, WiFi and Bluetooth BLE while mobile supports basic control of LumenRGB devices through WiFi and Bluetooth BLE.
+
 ## Licensing
 
 LumenRGB is dual‑licensed:

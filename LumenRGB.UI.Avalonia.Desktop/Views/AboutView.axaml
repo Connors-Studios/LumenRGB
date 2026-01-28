@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:LumenRGB.UI.Avalonia.Desktop.ViewModels"
+             x:DataType="vm:AboutViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LumenRGB.UI.Avalonia.Desktop.Views.AboutView">
+
+    <StackPanel>
+        <TextBlock Text="About" FontSize="24" Margin="0 0 0 10"/>
+
+        <TextBlock Text="{Binding DisplayVersion}" FontSize="16"/>
+        <TextBlock Text="{Binding BuildDate}" FontSize="16"/>
+        <TextBlock Text="{Binding OsInfo}" FontSize="16"/>
+        <TextBlock Text="{Binding RuntimeInfo}" FontSize="16"/>
+    </StackPanel>
+
+</UserControl>
