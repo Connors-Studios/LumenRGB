@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LumenRGB.Core\LumenRGB.Core.csproj" />
-    <ProjectReference Include="..\LumenRGB.Devices\LumenRGB.Devices.csproj" />
   </ItemGroup>
 </Project>
 
