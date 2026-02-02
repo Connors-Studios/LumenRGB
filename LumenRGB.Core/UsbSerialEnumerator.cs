@@ -8,7 +8,7 @@ namespace LumenRGB.Core
     public class UsbSerialDevice
     {
         public string Port { get; set; }
-        public string Serial { get; set; }
+        public string SerialNumber { get; set; }
         public string Manufacturer { get; set; }
         public string Product { get; set; }
         public string Vid { get; set; }

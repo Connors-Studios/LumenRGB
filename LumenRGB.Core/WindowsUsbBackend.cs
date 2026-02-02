@@ -29,12 +29,12 @@ namespace LumenRGB.Core
 
                     string manufacturer = info.Value.iManufacturer != 0 ? ReadString(hub, port, info.Value.iManufacturer) : null;
                     string product = info.Value.iProduct != 0 ? ReadString(hub, port, info.Value.iProduct) : null;
-                    string serial = info.Value.iSerialNumber != 0 ? ReadString(hub, port, info.Value.iSerialNumber) : null;
+                    string serialNumber = info.Value.iSerialNumber != 0 ? ReadString(hub, port, info.Value.iSerialNumber) : null;
 
-                    if (string.IsNullOrEmpty(serial))
+                    if (string.IsNullOrEmpty(serialNumber))
                         continue;
 
-                    string comPort = ResolveComPort(vid, pid, serial);
+                    string comPort = ResolveComPort(vid, pid, serialNumber);
                     if (string.IsNullOrEmpty(comPort))
                         continue;
 
@@ -43,7 +43,7 @@ namespace LumenRGB.Core
                         Port = comPort,
                         Vid = vid.ToString("X4"),
                         Pid = pid.ToString("X4"),
-                        Serial = serial,
+                        SerialNumber = serialNumber,
                         Manufacturer = manufacturer,
                         Product = product
                     });

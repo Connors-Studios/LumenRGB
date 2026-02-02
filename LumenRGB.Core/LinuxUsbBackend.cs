@@ -29,7 +29,7 @@ namespace LumenRGB.Core
                 Port = port,
                 Vid = Read(usb + "/idVendor"),
                 Pid = Read(usb + "/idProduct"),
-                Serial = Read(usb + "/serial"),
+                SerialNumber = Read(usb + "/serial"),
                 Manufacturer = Read(usb + "/manufacturer"),
                 Product = Read(usb + "/product")
             };
