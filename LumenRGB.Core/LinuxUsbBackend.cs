@@ -11,12 +11,12 @@ namespace LumenRGB.Core
         {
             return Directory.GetFiles("/dev")
                 .Where(f => f.StartsWith("/dev/ttyACM") || f.StartsWith("/dev/ttyUSB"))
-                .Select(port => CreateDevice(port))
-                .Where(d => d != null)
+                .Select(CreateDevice)
+                .OfType<UsbSerialDevice>()
                 .ToList();
         }
 
-        private static UsbSerialDevice CreateDevice(string port)
+        private static UsbSerialDevice? CreateDevice(string port)
         {
             string sys = $"/sys/class/tty/{Path.GetFileName(port)}/device";
             if (!Directory.Exists(sys))
@@ -35,7 +35,7 @@ namespace LumenRGB.Core
             };
         }
 
-        private static string Read(string path) =>
+        private static string? Read(string path) =>
             File.Exists(path) ? File.ReadAllText(path).Trim() : null;
     }
 }

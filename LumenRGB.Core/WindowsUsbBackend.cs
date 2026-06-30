@@ -27,14 +27,14 @@ namespace LumenRGB.Core
                     ushort vid = info.Value.idVendor;
                     ushort pid = info.Value.idProduct;
 
-                    string manufacturer = info.Value.iManufacturer != 0 ? ReadString(hub, port, info.Value.iManufacturer) : null;
-                    string product = info.Value.iProduct != 0 ? ReadString(hub, port, info.Value.iProduct) : null;
-                    string serialNumber = info.Value.iSerialNumber != 0 ? ReadString(hub, port, info.Value.iSerialNumber) : null;
+                    string? manufacturer = info.Value.iManufacturer != 0 ? ReadString(hub, port, info.Value.iManufacturer) : null;
+                    string? product = info.Value.iProduct != 0 ? ReadString(hub, port, info.Value.iProduct) : null;
+                    string? serialNumber = info.Value.iSerialNumber != 0 ? ReadString(hub, port, info.Value.iSerialNumber) : null;
 
                     if (string.IsNullOrEmpty(serialNumber))
                         continue;
 
-                    string comPort = ResolveComPort(vid, pid, serialNumber);
+                    string? comPort = ResolveComPort(vid, pid, serialNumber);
                     if (string.IsNullOrEmpty(comPort))
                         continue;
 
@@ -115,7 +115,7 @@ namespace LumenRGB.Core
             }
         }
 
-        private static string ReadString(SafeFileHandle hub, uint port, byte index)
+        private static string? ReadString(SafeFileHandle hub, uint port, byte index)
         {
             int size = Marshal.SizeOf<USB_DESCRIPTOR_REQUEST>() + 256;
             IntPtr buffer = Marshal.AllocHGlobal(size);
@@ -161,7 +161,7 @@ namespace LumenRGB.Core
 
         // ---------------- COM port resolver ----------------
 
-        public static string ResolveComPort(ushort vid, ushort pid, string serial)
+        public static string? ResolveComPort(ushort vid, ushort pid, string serial)
         {
             string instanceId = $"USB\\VID_{vid:X4}&PID_{pid:X4}\\{serial}";
 
@@ -171,27 +171,27 @@ namespace LumenRGB.Core
             return FindComRecursive(devInst);
         }
 
-        private static string FindComRecursive(uint devInst)
+        private static string? FindComRecursive(uint devInst)
         {
-            if (TryExtractComFromFriendly(GetFriendlyNameByInstanceId(GetDeviceIdFromDevInst(devInst)), out string com))
+            if (TryExtractComFromFriendly(GetFriendlyNameByInstanceId(GetDeviceIdFromDevInst(devInst)), out string? com))
                 return com;
 
             if (CM_Get_Child(out uint child, devInst, 0) == CR.SUCCESS)
             {
-                string found = FindComRecursive(child);
+                string? found = FindComRecursive(child);
                 if (found != null) return found;
             }
 
             if (CM_Get_Sibling(out uint sibling, devInst, 0) == CR.SUCCESS)
             {
-                string found = FindComRecursive(sibling);
+                string? found = FindComRecursive(sibling);
                 if (found != null) return found;
             }
 
             return null;
         }
 
-        private static bool TryExtractComFromFriendly(string friendly, out string comPort)
+        private static bool TryExtractComFromFriendly(string? friendly, out string? comPort)
         {
             comPort = null;
             if (string.IsNullOrEmpty(friendly))
@@ -207,13 +207,13 @@ namespace LumenRGB.Core
             return true;
         }
 
-        private static string GetDeviceIdFromDevInst(uint devInst)
+        private static string? GetDeviceIdFromDevInst(uint devInst)
         {
             var sb = new StringBuilder(MAX_DEVICE_ID_LEN);
             return CM_Get_Device_ID(devInst, sb, sb.Capacity, 0) == CR.SUCCESS ? sb.ToString() : null;
         }
 
-        private static string GetFriendlyNameByInstanceId(string instanceId)
+        private static string? GetFriendlyNameByInstanceId(string? instanceId)
         {
             if (instanceId == null)
                 return null;
@@ -235,11 +235,11 @@ namespace LumenRGB.Core
                 {
                     index++;
 
-                    string id = GetDeviceIdFromDevInst(devInfo.DevInst);
+                    string? id = GetDeviceIdFromDevInst(devInfo.DevInst);
                     if (id == null || !id.Equals(instanceId, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    string friendly = GetDevicePropertyString(infoSet, ref devInfo, SPDRP.SPDRP_FRIENDLYNAME);
+                    string? friendly = GetDevicePropertyString(infoSet, ref devInfo, SPDRP.SPDRP_FRIENDLYNAME);
                     return string.IsNullOrEmpty(friendly)
                         ? GetDevicePropertyString(infoSet, ref devInfo, SPDRP.SPDRP_DEVICEDESC)
                         : friendly;
@@ -253,7 +253,7 @@ namespace LumenRGB.Core
             return null;
         }
 
-        private static string GetDevicePropertyString(
+        private static string? GetDevicePropertyString(
             IntPtr infoSet, ref SP_DEVINFO_DATA devInfo, SPDRP property)
         {
             byte[] buffer = new byte[512];
@@ -371,7 +371,7 @@ namespace LumenRGB.Core
 
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetupDiGetClassDevs(
-            ref Guid ClassGuid, string Enumerator,
+            ref Guid ClassGuid, string? Enumerator,
             IntPtr hwndParent, uint Flags);
 
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -410,7 +410,7 @@ namespace LumenRGB.Core
 
         [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern IntPtr SetupDiGetClassDevs(
-            IntPtr ClassGuid, string Enumerator,
+            IntPtr ClassGuid, string? Enumerator,
             IntPtr hwndParent, DIGCF Flags);
 
         [DllImport("setupapi.dll", SetLastError = true)]
