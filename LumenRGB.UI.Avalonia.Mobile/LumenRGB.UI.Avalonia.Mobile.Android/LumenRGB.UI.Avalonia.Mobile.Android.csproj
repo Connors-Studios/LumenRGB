@@ -28,6 +28,11 @@
          (1.19.x via SplashScreen) — a version skew makes both ship AnimatorKt
          and the D8 dexer fails with "Type ... is defined multiple times". -->
     <PackageReference Include="Xamarin.AndroidX.Core.Core.Ktx" />
+    <!-- Pin lagging AndroidX.Lifecycle packages forward to match Common/Runtime
+         (resolved at 2.11.0.1), clearing the NU1608 version-skew warnings. -->
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.Process" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState" />
   </ItemGroup>
 
   <ItemGroup>
