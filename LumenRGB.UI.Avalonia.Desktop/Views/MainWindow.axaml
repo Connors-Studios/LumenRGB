@@ -15,7 +15,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#1A1A1A"
         TransparencyLevelHint="AcrylicBlur"
-        SystemDecorations="Full"
+        WindowDecorations="Full"
         x:Class="LumenRGB.UI.Avalonia.Desktop.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/LumenRGB_arc_256.ico"
