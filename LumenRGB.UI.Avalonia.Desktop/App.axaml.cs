@@ -1,14 +1,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using LumenRGB.UI.Avalonia.Desktop.ViewModels;
 using LumenRGB.UI.Avalonia.Desktop.Views;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LumenRGB.UI.Avalonia.Desktop
@@ -24,8 +21,6 @@ namespace LumenRGB.UI.Avalonia.Desktop
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                DisableAvaloniaDataAnnotationValidation();
-
                 // Linux clean up for old AppImage
                 TryCleanupOldAppImage();
 
@@ -57,18 +52,6 @@ namespace LumenRGB.UI.Avalonia.Desktop
             }
 
             base.OnFrameworkInitializationCompleted();
-        }
-
-        private void DisableAvaloniaDataAnnotationValidation()
-        {
-            var toRemove = BindingPlugins.DataValidators
-                .OfType<DataAnnotationsValidationPlugin>()
-                .ToArray();
-
-            foreach (var plugin in toRemove)
-            {
-                BindingPlugins.DataValidators.Remove(plugin);
-            }
         }
 
         // Cleans up old AppImage files on Linux systems

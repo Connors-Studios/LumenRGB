@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-android</TargetFramework>
-	<TargetPlatformVersion>34</TargetPlatformVersion>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <TargetFramework>net10.0-android</TargetFramework>
+	<TargetPlatformVersion>36.0</TargetPlatformVersion>
+    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ApplicationId>com.ConnorsStudios.LumenRGB</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
@@ -24,6 +24,10 @@
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" />
+    <!-- Pin core-ktx to match the transitively-resolved Xamarin.AndroidX.Core
+         (1.19.x via SplashScreen) — a version skew makes both ship AnimatorKt
+         and the D8 dexer fails with "Type ... is defined multiple times". -->
+    <PackageReference Include="Xamarin.AndroidX.Core.Core.Ktx" />
   </ItemGroup>
 
   <ItemGroup>
